@@ -13,14 +13,25 @@ class Encryption:
 
     def encrypt_input(self, userInput):
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
-    
+
+        input
+        caeserencryption = []
+
+        def caeserencryption (userInput):
+            for x in userInput:
+                if x == " ":
+                    userInput[x] = " "
+                if x == "9":
+
+                else:
+                    y = caeserencryption.index(userInput[x])
+                    userInput[x] = caeserencryption[y+1]
+        
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
         
 class CaesarEncryption(Encryption):
-    pass
-
 
 
 ####Tests below here###
