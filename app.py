@@ -19,7 +19,7 @@ class Encryption:
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
-
+        
 class CaesarEncryption(Encryption):
     pass
 
@@ -54,7 +54,15 @@ def runTests():
     test_1_encrypt_input()
     test_2_encrypt_input()
 
-    
+
+def main():
+    while True: 
+        userInput = UserInput()
+        userInput.get_userInput_from_cli()
+        newEncryption = CaesarEncryption()
+        newEncryption.encrypt_input(userInput.content)
+        print(newEncryption.encryptedContent)
 
 
 runTests()
+main()
