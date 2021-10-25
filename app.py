@@ -61,6 +61,17 @@ def test1_encrypt_input():
 
     if expected != result:
         raise Exception("test failed")
+
+
+def test2_encrypt_input():
+    sampleInput = "blareghoiawgnlanwe-1335-$=/)$§`'*"
+    expected = "blareghoiawgnlanwe-1335-$=/)$§`'*-encrypted"
+    sampleEncryption = CaesarEncryption()
+    sampleEncryption.encrypt_input(sampleInput)
+    result = sampleEncryption.encryptedContent
+
+    if expected != result:
+        raise Exception("test failed")
         
 
 
@@ -68,6 +79,7 @@ def runTests():
     test1_init_UserInput()
     test2_init_UserInput()
     test1_encrypt_input()
+    test2_encrypt_input()
 
 
 runTests()
