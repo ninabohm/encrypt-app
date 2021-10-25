@@ -17,7 +17,7 @@ class Encryption:
     def encrypt_input(self, userInput):
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
         
-        encryptedInput = userInput + " encrypted"
+        encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
 
@@ -25,38 +25,49 @@ class CaesarEncryption(Encryption):
     pass
 
 
-sampleEncryption = CaesarEncryption()
+# sampleEncryption = CaesarEncryption()
 
-sampleEncryption.encrypt_input("kevino")
-print(sampleEncryption.encryptedContent)
+# sampleEncryption.encrypt_input("kevino")
+# print(sampleEncryption.encryptedContent)
 
 
 ####Tests below here###
 def test1_init_UserInput():
     sampleInput = "foobar"
-    exptected = "foobar"
-
+    expected = "foobar"
     newInput = UserInput(sampleInput)
     result = newInput.content
 
-    if exptected != result:
+    if expected != result:
         raise Exception("test failed")
 
 
 def test2_init_UserInput():
     sampleInput = "bla bla12  35//)(!?***"
-    exptected = "bla bla12  35//)(!?***"
-
+    expected = "bla bla12  35//)(!?***"
     newInput = UserInput(sampleInput)
     result = newInput.content
 
-    if exptected != result:
+    if expected != result:
         raise Exception("test failed")
+
+
+def test1_encrypt_input():
+    sampleInput = "sampleInputHere"
+    expected = "sampleInputHere-encrypted"
+    sampleEncryption = CaesarEncryption()
+    sampleEncryption.encrypt_input(sampleInput)
+    result = sampleEncryption.encryptedContent
+
+    if expected != result:
+        raise Exception("test failed")
+        
 
 
 def runTests():
     test1_init_UserInput()
     test2_init_UserInput()
+    test1_encrypt_input()
 
 
 runTests()
