@@ -7,13 +7,13 @@ class Encryption:
     
 
     def get_userInput_from_cli(self):
-        newInput = input()
-        self.userInput = newInput
-
-
+        self.userInput = input()
+        return self.userInput 
+        
+        
     def encrypt_input(self, userInput):
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
-    
+
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
@@ -36,8 +36,8 @@ def test_1_encrypt_input():
 
 
 def test_2_encrypt_input():
-    sampleInput = "blareghoiawgnlanwe-1335-$=/)$§`'*"
-    expected = "blareghoiawgnlanwe-1335-$=/)$§`'*-encrypted"
+    sampleInput = "blareghoiawgnlanwe-1335-$=/"
+    expected = "blareghoiawgnlanwe-1335-$=/-encrypted"
     sampleEncryption = CaesarEncryption()
     sampleEncryption.encrypt_input(sampleInput)
     result = sampleEncryption.encryptedContent
