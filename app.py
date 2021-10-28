@@ -7,9 +7,8 @@ class Encryption:
     
 
     def get_userInput_from_cli(self):
-        newInput = input()
-        self.userInput = newInput
-        return newInput
+        self.userInput = input()
+        return self.userInput 
 
 
     def encrypt_input(self, userInput):
