@@ -10,6 +10,7 @@ class Encryption:
         self.userInput = input()
         return self.userInput 
 
+
     def encrypt_input(self, userInput):
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
 
