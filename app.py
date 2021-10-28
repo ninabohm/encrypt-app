@@ -24,35 +24,6 @@ class CaesarEncryption(Encryption):
 
 
 
-####Tests below here###
-def test_1_encrypt_input():
-    sampleInput = "sampleInputHere"
-    expected = "sampleInputHere-encrypted"
-    sampleEncryption = CaesarEncryption()
-    sampleEncryption.encrypt_input(sampleInput)
-    result = sampleEncryption.encryptedContent
-
-    if expected != result:
-        raise Exception("test failed")
-
-
-def test_2_encrypt_input():
-    sampleInput = "blareghoiawgnlanwe-1335-$=/"
-    expected = "blareghoiawgnlanwe-1335-$=/-encrypted"
-    sampleEncryption = CaesarEncryption()
-    sampleEncryption.encrypt_input(sampleInput)
-    result = sampleEncryption.encryptedContent
-
-    if expected != result:
-        raise Exception("test failed")
-        
-
-def runTests():
-    
-    test_1_encrypt_input()
-    test_2_encrypt_input()
-
-
 def main():
     while True: 
         newEncryption = CaesarEncryption()
@@ -61,5 +32,4 @@ def main():
         print(newEncryption.encryptedContent)
 
 
-runTests()
-#main()
+main()
