@@ -7,9 +7,9 @@ class Encryption:
     
 
     def get_userInput_from_cli(self):
-        print("here")
         newInput = input()
         self.userInput = newInput
+        return newInput
 
 
     def encrypt_input(self, userInput):
@@ -47,7 +47,6 @@ def test_2_encrypt_input():
         raise Exception("test failed")
         
 
-
 def runTests():
     
     test_1_encrypt_input()
@@ -63,4 +62,4 @@ def main():
 
 
 runTests()
-main()
+#main()
