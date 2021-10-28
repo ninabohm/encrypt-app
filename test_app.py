@@ -34,5 +34,6 @@ class TestEncryptInput(unittest.TestCase):
         self.assertEqual(self.mock_encryption.encryptedContent, "blareghoiawgnlanwe-1335-$=/-encrypted")
 
 
+
 if __name__ == '__main__':
     unittest.main()
