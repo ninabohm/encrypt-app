@@ -17,9 +17,9 @@ class Encryption:
 
         encryptedInput = list(userInput)
         for x in range(len(userInput)):
-            if x == " ":
+            if userInput[x] == " ":
                 encryptedInput[x] = " "
-            elif x == "9":
+            elif userInput[x] == "9":
                 encryptedInput[x] = self.alphabet[0]
             else:
                 y = self.alphabet.index(userInput[x])
@@ -30,9 +30,9 @@ class Encryption:
 
     def validate_input(self, userInput):
         for char in userInput:
-            if char not in self.alphabet:
-                return False
-        
+            if char not in self.alphabet and char != " ":
+                    return False
+                
         return True  
 
         
