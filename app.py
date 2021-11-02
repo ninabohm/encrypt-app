@@ -12,6 +12,9 @@ class Encryption:
 
 
     def encrypt_input(self, userInput):
+
+        if(not self.vaidate_input(userInput)):
+            raise Exception("Please only use words without special characters")
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
 
         encryptedInput = userInput + "-encrypted"
