@@ -25,7 +25,7 @@ class Encryption:
         self.encryptedContent = encryptedInput
 
 
-    def vaidate_input(self, userInput):
+    def validate_input(self, userInput):
         for char in userInput:
             if char not in self.alphabetIndex:
                 return False
