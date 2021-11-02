@@ -53,4 +53,4 @@ def main():
         print(newEncryption.encryptedContent)
 
 
-#main()
+main()
