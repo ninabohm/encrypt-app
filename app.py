@@ -1,5 +1,5 @@
 class Encryption:
-
+    
     def __init__(self):
         self.alphabetIndex = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
             "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
@@ -15,6 +15,7 @@ class Encryption:
 
         #TODO @ Lina :), currently encryptedInput is a placeholder variable
 
+<<<<<<< HEAD
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
@@ -29,7 +30,24 @@ class Encryption:
         
 class CaesarEncryption(Encryption):
     pass
+=======
+        for x in range(len(userInput)):
+            if x == " ":
+                userInput[x] = " "
+            elif x == "9":
+                userInput[x] = self.alphabetIndex[0]
+            else:
+                y = self.alphabetIndex.index(userInput[x])
+                userInput[x] = self.alphabetIndex[y+1]
+        
+        encryptedInput = userInput + "-encrypted"
+        self.encryptedContent = encryptedInput
 
+        
+class CaesarEncryption(Encryption):
+>>>>>>> linaV2
+
+    pass
 
 def main():
     while True: 
@@ -39,4 +57,7 @@ def main():
         print(newEncryption.encryptedContent)
 
 
+<<<<<<< HEAD
 main()
+=======
+>>>>>>> linaV2
