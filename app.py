@@ -17,6 +17,14 @@ class Encryption:
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
+
+    def vaidate_input(self, userInput):
+        for char in userInput:
+            if char not in self.alphabetIndex:
+                return False
+        
+        return True    
+
         
 class CaesarEncryption(Encryption):
     pass
