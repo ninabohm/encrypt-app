@@ -28,11 +28,15 @@ class TestEncryptInput(unittest.TestCase):
         self.mock_encryption.encrypt_input("sampleInputHere")
         self.assertEqual(self.mock_encryption.encryptedContent, "sampleInputHere-encrypted")
 
-
     def test_should_return_input_encrypted_with_special_characters(self):
         self.mock_encryption.encrypt_input("blareghoiawgnlanwe-1335-$=/")
         self.assertEqual(self.mock_encryption.encryptedContent, "blareghoiawgnlanwe-1335-$=/-encrypted")
 
+    def test_should_return_True_given_input_asdf(self):
+        self.assertTrue(self.mock_encryption.vaidate_input("asdf"))
+    
+    def test_should_return_False_given_input_with_special_charcters(self):
+        self.assertFalse(self.mock_encryption.vaidate_input("asdf&&&&"))
 
 
 if __name__ == '__main__':
