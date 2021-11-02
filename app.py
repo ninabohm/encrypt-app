@@ -12,25 +12,6 @@ class Encryption:
 
 
     def encrypt_input(self, userInput):
-
-        #TODO @ Lina :), currently encryptedInput is a placeholder variable
-
-<<<<<<< HEAD
-        encryptedInput = userInput + "-encrypted"
-        self.encryptedContent = encryptedInput
-
-
-    def vaidate_input(self, userInput):
-        for char in userInput:
-            if char not in self.alphabetIndex:
-                return False
-        
-        return True    
-
-        
-class CaesarEncryption(Encryption):
-    pass
-=======
         for x in range(len(userInput)):
             if x == " ":
                 userInput[x] = " "
@@ -43,10 +24,16 @@ class CaesarEncryption(Encryption):
         encryptedInput = userInput + "-encrypted"
         self.encryptedContent = encryptedInput
 
+
+    def vaidate_input(self, userInput):
+        for char in userInput:
+            if char not in self.alphabetIndex:
+                return False
+        
+        return True  
+
         
 class CaesarEncryption(Encryption):
->>>>>>> linaV2
-
     pass
 
 def main():
@@ -57,7 +44,4 @@ def main():
         print(newEncryption.encryptedContent)
 
 
-<<<<<<< HEAD
 main()
-=======
->>>>>>> linaV2
