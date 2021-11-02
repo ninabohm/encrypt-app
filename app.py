@@ -12,6 +12,9 @@ class Encryption:
 
 
     def encrypt_input(self, userInput):
+        if not self.validate_input(userInput):
+            raise InvalidInputException("Please only use words without special characters")
+
         encryptedInput = list(userInput)
         for x in range(len(userInput)):
             if x == " ":
@@ -37,6 +40,11 @@ class CaesarEncryption(Encryption):
     pass
 
 
+
+class InvalidInputException(Exception):
+    pass
+
+
 def main():
     while True: 
         newEncryption = CaesarEncryption()
@@ -45,4 +53,4 @@ def main():
         print(newEncryption.encryptedContent)
 
 
-main()
+#main()
