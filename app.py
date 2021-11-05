@@ -45,12 +45,10 @@ class InvalidInputException(Exception):
     pass
 
 
-def main():
+if __name__ == '__main__':
     while True: 
         newEncryption = CaesarEncryption()
         newEncryption.get_userInput_from_cli()
         newEncryption.encrypt_input(newEncryption.userInput)
         print(newEncryption.encryptedContent)
 
-
-main()
