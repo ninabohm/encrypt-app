@@ -15,17 +15,17 @@ class Encryption:
         if not self.validate_input(userInput):
             raise InvalidInputException("Please only use words without special characters")
 
-        workingInput = list(userInput)
+        self.encryptedContent = list(userInput)
         for pos in range(len(userInput)):
             if userInput[pos] == " ":
-                workingInput[pos] = " "
+                self.encryptedContent[pos] = " "
             elif userInput[pos] == "9":
-                workingInput[pos] = self.alphabet[0]
+                self.encryptedContent[pos] = self.alphabet[0]
             else:
                 y = self.alphabet.index(userInput[pos])
-                workingInput[pos] = self.alphabet[y+1]
+                self.encryptedContent[pos] = self.alphabet[y+1]
         
-        self.encryptedContent = "".join(workingInput)
+        self.encryptedContent = "".join(self.encryptedContent)
 
 
     def validate_input(self, userInput):
