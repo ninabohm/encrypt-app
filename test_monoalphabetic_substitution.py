@@ -19,3 +19,7 @@ class TestMonoalphabeticSubstitution(unittest.TestCase):
                 self.assertEqual(self.mock_encryption.encryptedContent, "~} |{")
 
         
+        def test_should_return_3x_5_vertB_given_input_ccccc_ccccc_ccccc(self):
+                self.mock_encryption.encrypt_input("ccccc ccccc ccccc")
+                self.assertEqual(self.mock_encryption.encryptedContent, "||||| ||||| |||||")
+        

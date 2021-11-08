@@ -20,7 +20,12 @@ class TestEncryption(unittest.TestCase):
 
 
         @patch('builtins.input', lambda *args: "abc√√√√√")
-        def test_should_throw_InvalidInputException_given_input_with_characters_not_in_list(self):
+        def test_should_throw_ValueError_given_input_with_characters_not_in_list(self):
+                with self.assertRaises(ValueError): self.mock_encryption.get_userInput_from_cli()
+
+        
+        @patch('builtins.input', lambda *args: "jassaÄÄÄ")
+        def test_should_throw_ValueError_given_input_with_umlaut(self):
                 with self.assertRaises(ValueError): self.mock_encryption.get_userInput_from_cli()
 
 
