@@ -4,7 +4,7 @@ class Encryption:
     
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
-            
+
 
     def get_userInput_from_cli(self):
         self.userInput = input()
@@ -16,6 +16,5 @@ class Encryption:
     def validate_input(self, userInput):
         for char in userInput:
             if char not in self.alphabet and char != " ":
-                    return False
-                
+                    return False 
         return True

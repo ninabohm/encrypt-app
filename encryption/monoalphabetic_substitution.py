@@ -11,5 +11,4 @@ class MonoalphabeticSubstitution(Encryption):
                 left = self.alphabet.index(userInput[pos])
                 right = len(self.alphabet) - 1 - left
                 self.encryptedContent[pos] = self.alphabet[right]
-        
         self.encryptedContent = "".join(self.encryptedContent)

@@ -1,5 +1,6 @@
 from encryption.encryption_base import Encryption
 
+
 class CaesarEncryption(Encryption):
     
     def encrypt_input(self, userInput):
@@ -12,5 +13,4 @@ class CaesarEncryption(Encryption):
             else:
                 y = self.alphabet.index(userInput[pos])
                 self.encryptedContent[pos] = self.alphabet[y+1]
-        
         self.encryptedContent = "".join(self.encryptedContent)
