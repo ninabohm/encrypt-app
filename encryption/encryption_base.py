@@ -1,4 +1,7 @@
+import logging
 import string
+
+logger = logging.getLogger(__name__)
 
 class Encryption:
     
@@ -9,6 +12,7 @@ class Encryption:
     def get_userInput_from_cli(self):
         self.userInput = input()
         if not self.validate_input(self.userInput):
+            logger.info("Invalid characters used")
             raise ValueError("Please only use words without special characters")
         return self.userInput
 
