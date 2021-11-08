@@ -15,14 +15,14 @@ class TestApp(unittest.TestCase):
                 self.assertEqual(self.mock_encryption.get_userInput_from_cli(), "lasse")
 
 
-        # @patch('builtins.input', lambda *args: "sampleInputHere13498715389(/&$%/&")
-        # def test_should_return_input_with_special_characters(self):
-        #         self.assertEqual(self.mock_encryption.get_userInput_from_cli(), "sampleInputHere13498715389(/&$%/&")
-
-
         @patch('builtins.input', lambda *args: "ab cd    ")
         def test_should_return_ab_cd_given_input_ab_cd(self):
                 self.assertEqual(self.mock_encryption.get_userInput_from_cli(), "ab cd    ")
+
+
+        @patch('builtins.input', lambda *args: "abc√√√√√")
+        def test_should_throw_InvalidInputException_given_input_with_characters_not_in_list(self):
+                with self.assertRaises(InvalidInputException): self.mock_encryption.get_userInput_from_cli()
 
 
         def test_should_return_bcd_given_input_abc(self):
@@ -49,13 +49,11 @@ class TestApp(unittest.TestCase):
                 self.assertTrue(self.mock_encryption.validate_input("asdf"))
 
 
-        def test_should_return_False_given_input_with_special_charcters(self):
-                self.assertFalse(self.mock_encryption.validate_input("asdf&&&&"))
+        def test_should_return_True_given_input_with_special_charcters(self):
+                self.assertTrue(self.mock_encryption.validate_input("asdf&&&&"))
 
 
-        @patch('builtins.input', lambda *args: "abc&&//!!")
-        def test_should_throw_InvalidInputException_given_input_with_special_characters(self):
-                with self.assertRaises(InvalidInputException): self.mock_encryption.get_userInput_from_cli()
+        
 
 
 
