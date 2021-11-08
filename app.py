@@ -11,21 +11,7 @@ class Encryption:
         self.userInput = input()
         if not self.validate_input(self.userInput):
             raise InvalidInputException("Please only use words without special characters")
-        return self.userInput 
-
-
-    def encrypt_input(self, userInput):
-        self.encryptedContent = list(userInput)
-        for pos in range(len(userInput)):
-            if userInput[pos] == " ":
-                self.encryptedContent[pos] = " "
-            elif userInput[pos] == "9":
-                self.encryptedContent[pos] = self.alphabet[0]
-            else:
-                y = self.alphabet.index(userInput[pos])
-                self.encryptedContent[pos] = self.alphabet[y+1]
-        
-        self.encryptedContent = "".join(self.encryptedContent)
+        return self.userInput
 
 
     def validate_input(self, userInput):
@@ -37,7 +23,26 @@ class Encryption:
 
         
 class CaesarEncryption(Encryption):
-    pass
+    
+    def encrypt_input(self, userInput):
+        self.encryptedContent = list(userInput)
+        for pos in range(len(userInput)):
+            if userInput[pos] == " ":
+                self.encryptedContent[pos] = " "
+            elif userInput[pos] == "~":
+                self.encryptedContent[pos] = self.alphabet[0]
+            else:
+                y = self.alphabet.index(userInput[pos])
+                self.encryptedContent[pos] = self.alphabet[y+1]
+        
+        self.encryptedContent = "".join(self.encryptedContent)
+
+
+class MonoalphabeticSubstitution(Encryption):
+
+    def encrypt_input(self, userInput):
+        print("somethingsomething")
+        #self.encryptedContent = userInput + "mono-ancrypted"
 
 
 
