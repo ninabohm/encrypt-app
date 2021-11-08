@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch
 from encryption.caesar_encryption import CaesarEncryption
-from app import InvalidInputException
 
 
 class TestCeasarEncryption(unittest.TestCase):
