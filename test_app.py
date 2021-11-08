@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import patch
-from app import CaesarEncryption
+from encryption.caesar_encryption import CaesarEncryption
 from app import InvalidInputException
 
 
-class TestApp(unittest.TestCase):
+class TestCeasarEncryption(unittest.TestCase):
 
         def setUp(self):
                 self.mock_encryption = CaesarEncryption()
@@ -22,7 +22,7 @@ class TestApp(unittest.TestCase):
 
         @patch('builtins.input', lambda *args: "abc√√√√√")
         def test_should_throw_InvalidInputException_given_input_with_characters_not_in_list(self):
-                with self.assertRaises(InvalidInputException): self.mock_encryption.get_userInput_from_cli()
+                with self.assertRaises(ValueError): self.mock_encryption.get_userInput_from_cli()
 
 
         def test_should_return_True_given_input_asdf(self):

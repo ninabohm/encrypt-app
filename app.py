@@ -1,48 +1,50 @@
-class Encryption:
+from encryption.caesar_encryption import CaesarEncryption
+
+# class Encryption:
     
-    def __init__(self):
-        self.alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-            "0","1","2","3","4","5","6","7","8","9",
-            "!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~"]
+#     def __init__(self):
+#         self.alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+#             "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+#             "0","1","2","3","4","5","6","7","8","9",
+#             "!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~"]
     
 
-    def get_userInput_from_cli(self):
-        self.userInput = input()
-        if not self.validate_input(self.userInput):
-            raise InvalidInputException("Please only use words without special characters")
-        return self.userInput
+#     def get_userInput_from_cli(self):
+#         self.userInput = input()
+#         if not self.validate_input(self.userInput):
+#             raise InvalidInputException("Please only use words without special characters")
+#         return self.userInput
 
 
-    def validate_input(self, userInput):
-        for char in userInput:
-            if char not in self.alphabet and char != " ":
-                    return False
+#     def validate_input(self, userInput):
+#         for char in userInput:
+#             if char not in self.alphabet and char != " ":
+#                     return False
                 
-        return True  
+#         return True  
 
         
-class CaesarEncryption(Encryption):
-    
-    def encrypt_input(self, userInput):
-        self.encryptedContent = list(userInput)
-        for pos in range(len(userInput)):
-            if userInput[pos] == " ":
-                self.encryptedContent[pos] = " "
-            elif userInput[pos] == "~":
-                self.encryptedContent[pos] = self.alphabet[0]
-            else:
-                y = self.alphabet.index(userInput[pos])
-                self.encryptedContent[pos] = self.alphabet[y+1]
+# class CaesarEncryption(Encryption):
+
+#     def encrypt_input(self, userInput):
+#         self.encryptedContent = list(userInput)
+#         for pos in range(len(userInput)):
+#             if userInput[pos] == " ":
+#                 self.encryptedContent[pos] = " "
+#             elif userInput[pos] == "~":
+#                 self.encryptedContent[pos] = self.alphabet[0]
+#             else:
+#                 y = self.alphabet.index(userInput[pos])
+#                 self.encryptedContent[pos] = self.alphabet[y+1]
         
-        self.encryptedContent = "".join(self.encryptedContent)
+#         self.encryptedContent = "".join(self.encryptedContent)
 
 
-class MonoalphabeticSubstitution(Encryption):
+# class MonoalphabeticSubstitution(Encryption):
 
-    def encrypt_input(self, userInput):
-        print("somethingsomething")
-        #self.encryptedContent = userInput + "mono-ancrypted"
+#     def encrypt_input(self, userInput):
+#         print("somethingsomething")
+#         #self.encryptedContent = userInput + "mono-ancrypted"
 
 
 
