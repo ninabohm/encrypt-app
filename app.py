@@ -8,13 +8,12 @@ class Encryption:
 
     def get_userInput_from_cli(self):
         self.userInput = input()
+        if not self.validate_input(self.userInput):
+            raise InvalidInputException("Please only use words without special characters")
         return self.userInput 
 
 
     def encrypt_input(self, userInput):
-        if not self.validate_input(userInput):
-            raise InvalidInputException("Please only use words without special characters")
-
         self.encryptedContent = list(userInput)
         for pos in range(len(userInput)):
             if userInput[pos] == " ":
