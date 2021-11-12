@@ -32,10 +32,10 @@ class CaesarEncryption(Encryption):
     pass
 
 def main():
-    while True: 
+    while True:         
         newEncryption = CaesarEncryption()
         newEncryption.get_userInput_from_cli()
-        newEncryption.encrypt_input(newEncryption.userInput)
+        newEncryption.encrypt_input(newEncryption.userInput, 2)
         print(newEncryption.encryptedContent)
 
 
