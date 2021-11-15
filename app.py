@@ -13,19 +13,19 @@ class App:
 
     if __name__ == '__main__':
         while True: 
-            print("1: Caeser Encryption")
+            print("1: Caesar Encryption")
             print("2: Monoalphabetic Substitution Encryption")
             print("3: About")
             print("4: Quit program")
             value = input("Choose a value and press Enter: ")
 
             if value == "1":
-                logging.info("Caeser Encryption started")
+                logging.info("Caesar Encryption started")
                 while True: 
                     newEncryption = CaesarEncryption()
                     print("Please insert a string")
                     newEncryption.get_userInput_from_cli()   
-                    shift = input("Please insert the offset/vektor (Press Enter for a random value): ")
+                    shift = input("Please insert the offset/vector (Press Enter for a random value): ")
                     newEncryption.encrypt_input(newEncryption.userInput, shift)
                     print(newEncryption.encryptedContent)
             

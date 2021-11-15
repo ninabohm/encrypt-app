@@ -21,8 +21,8 @@ class CaesarEncryption(Encryption):
                 
                 if y + shift > len(self.alphabet): 
                     rest = shift % len(self.alphabet)
-                    differenz = len(self.alphabet) - y
-                    rest = rest - differenz
+                    difference = len(self.alphabet) - y
+                    rest = rest - difference
                     self.encryptedContent[pos] = self.alphabet[rest]
                 else: 
                     self.encryptedContent[pos] = self.alphabet[y+shift]
