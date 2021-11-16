@@ -1,5 +1,8 @@
 from encryption.encryption_base import Encryption
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CaesarEncryption(Encryption):
     
@@ -8,9 +11,10 @@ class CaesarEncryption(Encryption):
 
         if shift == "":
             shift = random.randint(0, 1024)
+            logger.info(f"User chose shift of {shift} ")
         else: 
             shift = int(shift)
-
+            logger.info(f"User chose shift of {shift}")
         for pos in range(len(userInput)):
             if userInput[pos] == " ":
                 self.encryptedContent[pos] = " "

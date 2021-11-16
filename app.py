@@ -45,7 +45,7 @@ if __name__ == "__main__":
                 print(newEncryption.encryptedContent)
 
         if value == "3":
-            print("Welcome to the amazing encrypt-app made by the **X-inas**.")
+            print("Welcome to the encrypt-app")
 
         if value == "4":
             exit()
