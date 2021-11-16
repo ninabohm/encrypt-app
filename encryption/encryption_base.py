@@ -7,7 +7,7 @@ class Encryption:
     
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
-        #for reference: alphabet contains the following values: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+
 
     def get_userInput_from_cli(self):
         self.userInput = input()
