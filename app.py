@@ -25,14 +25,25 @@ class App:
 
     def login(self):
         logging.info("Login started")
-        user_name = input("Please insert your first name to log in")
+        self.user = User()
+        self.user.firstName = input("Please insert your first name to log in: ")
+        if self.user.check_if_in_user_list(self.user.firstName):
+            print("Successfully logged in")
+            self.user.logged_in = True
+            return self.user.logged_in
+        else:
+            print("Not a user")
+            self.user.logged_in = False
+            return self.user.logged_in
 
 
     def register(self):
         logging.info("Registering started")
         user = User()
-        user.safe_user()
-        return user
+        user.create_user()
+        user.save_user()
+        self.login()
+
 
 
     def create_menu(self):
@@ -51,8 +62,11 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.start()
+    while(not app.user.logged_in):
+        app.start()
     app.create_menu()
     app.keep_encryption_alive()
+
 
 
 
