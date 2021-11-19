@@ -1,4 +1,11 @@
+from encryption.caesar_encryption import CaesarEncryption
+
 class Menu:
+
+    def __init__(self):
+        self.print_menu()
+        self.option = input("Choose a value and press Enter: ")
+
 
     def print_menu(self):
         print("1: Caesar Encryption")
@@ -7,6 +14,6 @@ class Menu:
         print("4: Quit program")
 
 
-    def get_user_action(self):
-        self.value = input("Choose a value and press Enter: ")
-
+    def define_encryption_type(self):
+        if self.option == "1":
+            return CaesarEncryption()

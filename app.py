@@ -14,36 +14,30 @@ logging.basicConfig(stream=sys.stdout,
 
 
 if __name__ == "__main__":
-
-
     menu = Menu()
-    menu.print_menu()
-    menu.get_user_action()
 
-    while True:
-        if menu.value == "1":
-            logging.info("Caesar Encryption started")
-            while True:
-                newEncryption = CaesarEncryption()
-                print("Please insert a string")
-                newEncryption.get_userInput_from_cli()
-                shift = input("Please insert the offset/vector (Press Enter for a random value): ")
-                newEncryption.encrypt_input(newEncryption.userInput, shift)
-                print(newEncryption.encryptedContent)
+    encryption = menu.define_encryption_type()
+    print("Please insert a string")
+    encryption.get_userInput_from_cli()
+    shift = input("Please insert the offset/vector (Press Enter for a random value): ")
+    encryption.encrypt_input(encryption.userInput, shift)
+    print(encryption.encryptedContent)
 
-        if menu.value == "2":
-            logging.info("Monoalphabetic Substitution Encryption started")
-            while True:
-                newEncryption = MonoalphabeticSubstitution()
-                newEncryption.get_userInput_from_cli()
-                newEncryption.encrypt_input(newEncryption.userInput)
-                print(newEncryption.encryptedContent)
 
-        if menu.value == "3":
-            print("Welcome to the encrypt-app")
+    if menu.option == "2":
+        logging.info("Monoalphabetic Substitution Encryption started")
+        while True:
+            encryption = MonoalphabeticSubstitution()
+            print("Please insert a string")
+            encryption.get_userInput_from_cli()
+            encryption.encrypt_input(encryption.userInput)
+            print(encryption.encryptedContent)
 
-        if menu.value == "4":
-            exit()
+    if menu.option == "3":
+        print("Welcome to the encrypt-app")
+
+    if menu.option == "4":
+        exit()
 
 
     
