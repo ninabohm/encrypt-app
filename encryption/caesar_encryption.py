@@ -8,7 +8,11 @@ class CaesarEncryption(Encryption):
 
     def get_shift_value(self):
         self.shift = input("Please insert the offset/vector (Press Enter for a random value): ")
-        return int (self.shift)
+        try:
+            return int (self.shift)
+        except ValueError:
+            self.shift = ""
+            return self.shift
 
 
     def encrypt_input(self, userInput):

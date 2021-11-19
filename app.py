@@ -12,31 +12,22 @@ logging.basicConfig(stream=sys.stdout,
     datefmt="%Y-%m-%d %H:%M:%S")
 
 
+def keep_encryption_alive():
+    while True:
+        encryption = menu.define_encryption_type_or_exit()
+        print("Please insert a string")
+        encryption.get_userInput_from_cli()
+        encryption.encrypt_input(encryption.userInput)
+        print(encryption.encryptedContent)
+
 
 if __name__ == "__main__":
     menu = Menu()
-
-    encryption = menu.define_encryption_type()
-    print("Please insert a string")
-    encryption.get_userInput_from_cli()
-    encryption.encrypt_input(encryption.userInput)
-    print(encryption.encryptedContent)
+    keep_encryption_alive()
 
 
-    if menu.option == "2":
-        logging.info("Monoalphabetic Substitution Encryption started")
-        while True:
-            encryption = MonoalphabeticSubstitution()
-            print("Please insert a string")
-            encryption.get_userInput_from_cli()
-            encryption.encrypt_input(encryption.userInput)
-            print(encryption.encryptedContent)
 
-    if menu.option == "3":
-        print("Welcome to the encrypt-app")
 
-    if menu.option == "4":
-        exit()
 
 
     
