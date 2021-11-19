@@ -25,11 +25,13 @@ class App:
 
     def login(self):
         logging.info("Login started")
+        user_name = input("Please insert your first name to log in")
 
 
     def register(self):
         logging.info("Registering started")
         user = User()
+        user.safe_user()
         return user
 
 
