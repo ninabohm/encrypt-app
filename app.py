@@ -19,8 +19,7 @@ if __name__ == "__main__":
     encryption = menu.define_encryption_type()
     print("Please insert a string")
     encryption.get_userInput_from_cli()
-    shift = input("Please insert the offset/vector (Press Enter for a random value): ")
-    encryption.encrypt_input(encryption.userInput, shift)
+    encryption.encrypt_input(encryption.userInput)
     print(encryption.encryptedContent)
 
 

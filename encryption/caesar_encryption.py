@@ -5,15 +5,20 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CaesarEncryption(Encryption):
-    
-    def encrypt_input(self, userInput, shift = ""):
+
+    def get_shift_value(self):
+        self.shift = input("Please insert the offset/vector (Press Enter for a random value): ")
+        return int (self.shift)
+
+
+    def encrypt_input(self, userInput):
+        shift = self.get_shift_value()
         self.encryptedContent = list(userInput)
 
         if shift == "":
             shift = random.randint(0, 1024)
             logger.info(f"User chose shift of {shift} ")
         else: 
-            shift = int(shift)
             logger.info(f"User chose shift of {shift}")
         for pos in range(len(userInput)):
             if userInput[pos] == " ":
@@ -32,3 +37,4 @@ class CaesarEncryption(Encryption):
                     self.encryptedContent[pos] = self.alphabet[y+shift]
 
         self.encryptedContent = "".join(self.encryptedContent)
+
