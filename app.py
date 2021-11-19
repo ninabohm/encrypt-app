@@ -4,7 +4,6 @@ from encryption.caesar_encryption import CaesarEncryption
 from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
 from menu.menu import Menu
 
-app = Flask(__name__)
 
 logging.basicConfig(stream=sys.stdout,
     encoding="utf-8",
@@ -13,21 +12,16 @@ logging.basicConfig(stream=sys.stdout,
     datefmt="%Y-%m-%d %H:%M:%S")
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
 
 if __name__ == "__main__":
-    #app.run()
-    promptMenu = Menu()
-    promptMenu.print_menu()
+
+
+    menu = Menu()
+    menu.print_menu()
+    menu.get_user_action()
 
     while True:
-        value = input("Choose a value and press Enter: ")
-
-        if value == "1":
+        if menu.value == "1":
             logging.info("Caesar Encryption started")
             while True:
                 newEncryption = CaesarEncryption()
@@ -37,7 +31,7 @@ if __name__ == "__main__":
                 newEncryption.encrypt_input(newEncryption.userInput, shift)
                 print(newEncryption.encryptedContent)
 
-        if value == "2":
+        if menu.value == "2":
             logging.info("Monoalphabetic Substitution Encryption started")
             while True:
                 newEncryption = MonoalphabeticSubstitution()
@@ -45,10 +39,10 @@ if __name__ == "__main__":
                 newEncryption.encrypt_input(newEncryption.userInput)
                 print(newEncryption.encryptedContent)
 
-        if value == "3":
+        if menu.value == "3":
             print("Welcome to the encrypt-app")
 
-        if value == "4":
+        if menu.value == "4":
             exit()
 
 
