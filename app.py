@@ -1,7 +1,5 @@
 from flask import Flask, redirect, url_for, render_template
 import logging, sys
-from encryption.caesar_encryption import CaesarEncryption
-from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
 from menu.menu import Menu
 
 
@@ -11,19 +9,28 @@ logging.basicConfig(stream=sys.stdout,
     format="%(asctime)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S")
 
+class App:
 
-def keep_encryption_alive():
-    while True:
-        encryption = menu.define_encryption_type_or_exit()
-        print("Please insert a string")
-        encryption.get_userInput_from_cli()
-        encryption.encrypt_input(encryption.userInput)
-        print(encryption.encryptedContent)
+    def __init__(self):
+        self.menu = Menu()
+
+    def keep_encryption_alive(self):
+        while True:
+            encryption = self.menu.define_encryption_type_or_exit()
+            print("Please insert a string")
+            encryption.get_userInput_from_cli()
+            encryption.encrypt_input(encryption.userInput)
+            print(encryption.encryptedContent)
+
+
+    def login(self):
+        return 0
 
 
 if __name__ == "__main__":
-    menu = Menu()
-    keep_encryption_alive()
+    app = App()
+    app.login()
+    app.keep_encryption_alive()
 
 
 
