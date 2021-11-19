@@ -9,6 +9,7 @@ class Menu:
 
 
     def print_menu(self):
+        print("Welcome to the encrypt-app")
         print("1: Caesar Encryption")
         print("2: Monoalphabetic Substitution Encryption")
         print("3: About")
@@ -23,7 +24,7 @@ class Menu:
             return MonoalphabeticSubstitution()
 
         if self.option == "3":
-            print("Welcome to the encrypt-app")
+            print("Learn more about the app on https://gitlab.rz.htw-berlin.de/schroedr/vl2022_ina/")
 
         if self.option == "4":
             exit()
