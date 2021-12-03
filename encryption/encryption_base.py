@@ -11,14 +11,15 @@ class Encryption:
 
     def get_userInput_from_cli(self):
         self.userInput = input()
-        if not self.validate_input(self.userInput):
-            logger.info("Invalid characters used")
-            raise ValueError("Please only use words without special characters")
+        try:
+            self.validate_input(self.userInput)
+        except ValueError as error:
+            logger.info(error)
+            self.get_userInput_from_cli()
         return self.userInput
 
 
     def validate_input(self, userInput):
         for char in userInput:
             if char not in self.alphabet and char != " ":
-                    return False 
-        return True
+                   raise ValueError("Sorry, only no special characters allowed. Please try again.")
