@@ -2,6 +2,9 @@ from flask import Flask, redirect, url_for, render_template
 import logging, sys
 from menu.menu import Menu
 from user.user import User
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session, sessionmaker
 
 
 logging.basicConfig(stream=sys.stdout,
@@ -11,39 +14,28 @@ logging.basicConfig(stream=sys.stdout,
     datefmt="%Y-%m-%d %H:%M:%S")
 
 
+logger = logging.getLogger(__name__)
+
+
+SqlAlchemyBase = declarative_base()
+engine = create_engine("sqlite:///data.db")
+logger.info("Engine created")
+SqlAlchemyBase.metadata.create_all(engine)
+Session = sessionmaker(engine)
+session = Session()
+logger.info("DB session started")
+
+
 class App:
 
     def start(self):
         logging.info("Application up and running")
-        option = input("Please press 1 to login or 2 to register ")
-        if option == "1":
-            self.login()
-
-        if option == "2":
-            self.register()
-
-
-    def login(self):
-        logging.info("Login started")
-        self.user = User()
-        self.user.firstName = input("Please insert your first name to log in: ")
-        if self.user.check_if_in_user_list(self.user.firstName):
-            print("Successfully logged in")
-            self.user.logged_in = True
-            return self.user.logged_in
-        else:
-            print("Not a user")
-            self.user.logged_in = False
-            return self.user.logged_in
-
-
-    def register(self):
-        logging.info("Registering started")
-        user = User()
-        user.create_user()
-        user.save_user()
-        self.login()
-
+        userName = input("Please insert your name to login: ")
+        user = User(userName)
+        session.add(user)
+        logger.info('User created')
+        session.commit()
+        logger.info("Session committed")
 
 
     def create_menu(self):
@@ -62,8 +54,6 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.start()
-    while(not app.user.logged_in):
-        app.start()
     app.create_menu()
     app.keep_encryption_alive()
 

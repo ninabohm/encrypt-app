@@ -1,24 +1,29 @@
 from user.user_list import user_list
 import logging
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session, sessionmaker
 
 
 logger = logging.getLogger(__name__)
+SqlAlchemyBase = declarative_base()
 
-class User:
+class User(SqlAlchemyBase):
 
-    def __init__(self):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+
+    def __init__(self, name: str):
         self.logged_in = False
+        self.name = name
 
 
-    def create_user(self):
-        self.firstName = input("Please type your first name and press enter ")
 
-
-    def save_user(self):
-        user_list.append(self.firstName)
-        logger.info(f"User with first name {self.firstName} saved in user list")
-
-
-    def check_if_in_user_list(self, user):
-        return user in user_list
-
+#     user = User(self.name)
+#     session.add(user)
+#     logger.info('User created')
+#     session.commit()
+#     logger.info("Session committed")
