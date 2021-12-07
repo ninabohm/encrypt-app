@@ -5,6 +5,8 @@ from user.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+
 
 
 logging.basicConfig(stream=sys.stdout,
@@ -30,12 +32,22 @@ class App:
 
     def start(self):
         logging.info("Application up and running")
-        userName = input("Please insert your name to login: ")
+        userName = input("Please insert your name to login. If you don't have an account yet, we'll create one for you on the fly: ")
         user = User(userName)
-        session.add(user)
-        logger.info(f"User with name {user.name} created")
-        session.commit()
-        logger.info("Session committed")
+        try:
+            self.check_if_user_exists(userName)
+        except NoResultFound:
+            logger.info(f"User with name {userName} does not exist yet, creating user on the fly")
+            session.add(user)
+            logger.info(f"User with name {user.name} created")
+            session.commit()
+            logger.info("DB session committed")
+        except MultipleResultsFound as error:
+            logger.info(f"User with name {userName} exists already more than once. Logging in.")
+
+
+    def check_if_user_exists(self, userName: str):
+        user = session.query(User).filter_by(name=userName).one()
 
 
     def create_menu(self):

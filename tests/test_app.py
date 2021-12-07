@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from app import App
 from menu.menu import Menu
+from user.user import User
 
 
 class TestApp(unittest.TestCase):
@@ -16,3 +17,7 @@ class TestApp(unittest.TestCase):
         self.mock_app.create_menu()
         self.assertIsInstance(self.mock_app.menu, Menu)
 
+
+    def test_should_return_true_given_user_foo_exists(self):
+        self.user = User("foo")
+        self.assertTrue(self.mock_app.check_if_user_exists("foo"))
