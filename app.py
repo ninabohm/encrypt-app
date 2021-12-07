@@ -1,4 +1,3 @@
-from flask import Flask, redirect, url_for, render_template
 import logging, sys
 from menu.menu import Menu
 from user.user import User
@@ -31,23 +30,23 @@ class App:
 
     def start(self):
         logging.info("Application up and running")
-        userName = input("Please insert your name to login. If you don't have an account yet, we'll create one for you on the fly: ")
-        user = User(userName)
+        user_name = input("Please insert your name to login. You'll be registered automatically if you have no account yet.: ")
+        user = User(user_name)
         try:
-            self.check_if_user_exists(userName)
-            logger.info(f"Login for user {userName} successful")
+            self.check_if_user_exists(user_name)
+            logger.info(f"Login for user {user_name} successful")
         except NoResultFound:
-            logger.info(f"User with name {userName} does not exist yet, creating user on the fly")
+            logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
             session.add(user)
             logger.info(f"User with name {user.name} created")
             session.commit()
             logger.info("DB session committed")
         except MultipleResultsFound as error:
-            logger.info(f"User with name {userName} exists already more than once. Login successful.")
+            logger.info(f"User with name {user_name} exists already more than once. Login successful.")
 
 
-    def check_if_user_exists(self, userName: str):
-        user = session.query(User).filter_by(name=userName).one()
+    def check_if_user_exists(self, user_name: str):
+        return session.query(User).filter_by(name=user_name).one()
 
 
     def create_menu(self):

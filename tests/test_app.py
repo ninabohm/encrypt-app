@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch
 from app import App
 from menu.menu import Menu
-from user.user import User
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
