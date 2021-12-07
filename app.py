@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
-
 logging.basicConfig(stream=sys.stdout,
     encoding="utf-8",
     level=logging.DEBUG,
@@ -36,6 +35,7 @@ class App:
         user = User(userName)
         try:
             self.check_if_user_exists(userName)
+            logger.info(f"Login for user {userName} successful")
         except NoResultFound:
             logger.info(f"User with name {userName} does not exist yet, creating user on the fly")
             session.add(user)
@@ -43,7 +43,7 @@ class App:
             session.commit()
             logger.info("DB session committed")
         except MultipleResultsFound as error:
-            logger.info(f"User with name {userName} exists already more than once. Logging in.")
+            logger.info(f"User with name {userName} exists already more than once. Login successful.")
 
 
     def check_if_user_exists(self, userName: str):

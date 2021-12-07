@@ -3,6 +3,7 @@ from unittest.mock import patch
 from app import App
 from menu.menu import Menu
 from user.user import User
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 class TestApp(unittest.TestCase):
@@ -18,6 +19,5 @@ class TestApp(unittest.TestCase):
         self.assertIsInstance(self.mock_app.menu, Menu)
 
 
-    def test_should_return_true_given_user_foo_exists(self):
-        self.user = User("foo")
-        self.assertTrue(self.mock_app.check_if_user_exists("foo"))
+    def test_should_raise_NoResultFound_given_user_foo2_does_not_exist(self):
+        with self.assertRaises(NoResultFound): self.mock_app.check_if_user_exists("foo2")
