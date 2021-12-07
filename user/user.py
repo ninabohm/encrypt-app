@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 logger = logging.getLogger(__name__)
 SqlAlchemyBase = declarative_base()
 
+
 class User(SqlAlchemyBase):
 
     __tablename__ = "user"

@@ -8,7 +8,6 @@ class Encryption:
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
 
-
     def get_user_input_from_cli(self):
         self.user_input = input()
         try:
@@ -17,7 +16,6 @@ class Encryption:
             logger.info(error)
             self.get_user_input_from_cli()
         return self.user_input
-
 
     def validate_input(self, user_input):
         for char in user_input:

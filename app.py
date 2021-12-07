@@ -44,14 +44,11 @@ class App:
         except MultipleResultsFound as error:
             logger.info(f"User with name {user_name} exists already more than once. Login successful.")
 
-
     def check_if_user_exists(self, user_name: str):
         return session.query(User).filter_by(name=user_name).one()
 
-
     def create_menu(self):
         self.menu = Menu()
-
 
     def keep_encryption_alive(self):
         while True:
