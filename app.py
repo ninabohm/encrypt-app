@@ -33,7 +33,7 @@ class App:
         userName = input("Please insert your name to login: ")
         user = User(userName)
         session.add(user)
-        logger.info('User created')
+        logger.info(f"User with name {user.name} created")
         session.commit()
         logger.info("Session committed")
 
