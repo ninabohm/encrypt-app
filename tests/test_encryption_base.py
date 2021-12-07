@@ -11,12 +11,12 @@ class TestEncryption(unittest.TestCase):
 
         @patch('builtins.input', lambda *args: "lasse")
         def test_should_return_lasse_given_input_lasse(self):
-            self.assertEqual(self.mock_encryption.get_userInput_from_cli(), "lasse")
+            self.assertEqual(self.mock_encryption.get_user_input_from_cli(), "lasse")
 
 
         @patch('builtins.input', lambda *args: "ab cd    ")
         def test_should_return_ab_cd_given_input_ab_cd(self):
-            self.assertEqual(self.mock_encryption.get_userInput_from_cli(), "ab cd    ")
+            self.assertEqual(self.mock_encryption.get_user_input_from_cli(), "ab cd    ")
 
 
         def test_should_raise_Exception_given_input_with_special_characters(self):

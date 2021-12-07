@@ -57,9 +57,9 @@ class App:
         while True:
             encryption = self.menu.define_encryption_type_or_exit()
             print("Please insert a string ")
-            encryption.get_userInput_from_cli()
-            encryption.encrypt_input(encryption.userInput)
-            print(encryption.encryptedContent)
+            encryption.get_user_input_from_cli()
+            encryption.encrypt_input(encryption.user_input)
+            print(encryption.encrypted_string)
 
 
 if __name__ == "__main__":
