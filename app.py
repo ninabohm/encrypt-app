@@ -40,7 +40,6 @@ class App:
             session.add(user)
             logger.info(f"User with name {user.name} created")
             session.commit()
-            logger.info("DB session committed")
         except MultipleResultsFound as error:
             logger.info(f"User with name {user_name} exists already more than once. Login successful.")
 
@@ -55,8 +54,8 @@ class App:
             encryption = self.menu.define_encryption_type_or_exit()
             print("Please insert a string ")
             encryption.get_user_input_from_cli()
-            encryption.encrypt_input(encryption.user_input)
-            print(encryption.encrypted_string)
+            encrypted_string = encryption.encrypt_input(encryption.user_input)
+            print(encrypted_string)
 
 
 if __name__ == "__main__":
