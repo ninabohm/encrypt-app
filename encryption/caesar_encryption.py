@@ -1,3 +1,4 @@
+from encryption.encryption_base import Encryption
 from encryption.encrypted_string import EncryptedString
 import random, logging
 from sqlalchemy import Column, Integer, String, create_engine
@@ -9,7 +10,7 @@ SqlAlchemyBase = declarative_base()
 engine = create_engine("sqlite:///data.db", echo=True)
 
 
-class CaesarEncryption(SqlAlchemyBase):
+class CaesarEncryption(Encryption):
 
     __tablename__ = "caesar_encryption"
 
