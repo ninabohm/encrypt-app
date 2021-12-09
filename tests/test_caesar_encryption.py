@@ -50,6 +50,5 @@ class TestCaesarEncryption(unittest.TestCase):
         self.assertEqual(encrypted_string, "A")
 
 
-
 if __name__ == '__main__':
     unittest.main()
