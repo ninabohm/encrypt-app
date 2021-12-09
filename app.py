@@ -1,7 +1,8 @@
 import logging, sys
 from menu.menu import Menu
 from user.user import User
-from sqlalchemy import create_engine
+from encryption.encrypted_string import EncryptedString
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
@@ -13,17 +14,7 @@ logging.basicConfig(stream=sys.stdout,
     format="%(asctime)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S")
 
-
 logger = logging.getLogger(__name__)
-
-
-SqlAlchemyBase = declarative_base()
-engine = create_engine("sqlite:///data.db")
-logger.info("Engine created")
-SqlAlchemyBase.metadata.create_all(engine)
-Session = sessionmaker(engine)
-session = Session()
-logger.info("DB session started")
 
 
 class App:
@@ -38,9 +29,14 @@ class App:
         except NoResultFound:
             logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
             session.add(user)
-            logger.info(f"User with name {user.name} created")
             session.commit()
-        except MultipleResultsFound as error:
+            logger.info(f"User with name {user.name} created")
+
+            users = session.query(User)
+            for user in users.all():
+                print(user.name)
+
+        except MultipleResultsFound:
             logger.info(f"User with name {user_name} exists already more than once. Login successful.")
 
     def check_if_user_exists(self, user_name: str):
@@ -49,20 +45,31 @@ class App:
     def create_menu(self):
         self.menu = Menu()
 
-    def keep_encryption_alive(self):
+    def keep_alive(self, session):
         while True:
             encryption = self.menu.define_encryption_type_or_exit()
             print("Please insert a string ")
             encryption.get_user_input_from_cli()
-            encrypted_string = encryption.encrypt_input(encryption.user_input)
-            print(encrypted_string)
+            encrypted_string = EncryptedString(encryption.encrypt_input(encryption.user_input))
+            session.add(encrypted_string)
+            session.commit()
+            print(encrypted_string.content)
 
 
 if __name__ == "__main__":
+    SqlAlchemyBase = declarative_base()
+    engine = create_engine("sqlite:///data.db")
+    SqlAlchemyBase.metadata.create_all(engine)
+    Session = sessionmaker(engine)
+    session = Session()
+
     app = App()
     app.start()
     app.create_menu()
-    app.keep_encryption_alive()
+    app.keep_alive(session)
+    session.commit()
+
+
 
 
 

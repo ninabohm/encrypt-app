@@ -1,12 +1,20 @@
-from encryption.encryption_base import Encryption
 from encryption.encrypted_string import EncryptedString
-import random
-import logging
+import random, logging
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.ext.declarative import declarative_base
 
 logger = logging.getLogger(__name__)
 
+SqlAlchemyBase = declarative_base()
+engine = create_engine("sqlite:///data.db", echo=True)
 
-class CaesarEncryption(Encryption):
+
+class CaesarEncryption(SqlAlchemyBase):
+
+    __tablename__ = "caesar_encryption"
+
+    id = Column(Integer, primary_key=True)
+    shift = Column(Integer)
 
     def encrypt_input(self, user_input):
         shift = self.get_shift_value()
@@ -14,9 +22,9 @@ class CaesarEncryption(Encryption):
 
         for pos in range(len(user_input)):
             if user_input[pos] == " ":
-                encrypted_string.content[pos] = " "
+                encrypted_string.content_list[pos] = " "
             elif user_input[pos] == "~":
-                encrypted_string.content[pos] = self.alphabet[0]
+                encrypted_string.content_list[pos] = self.alphabet[0]
             else:
                 y = self.alphabet.index(user_input[pos])
                 
@@ -24,14 +32,12 @@ class CaesarEncryption(Encryption):
                     rest = shift % len(self.alphabet)
                     difference = len(self.alphabet) - y
                     rest = rest - difference
-                    encrypted_string.content[pos] = self.alphabet[rest]
+                    encrypted_string.content_list[pos] = self.alphabet[rest]
                 else: 
-                    encrypted_string.content[pos] = self.alphabet[y+shift]
+                    encrypted_string.content_list[pos] = self.alphabet[y + shift]
 
-        encrypted_string = "".join(encrypted_string.content)
+        encrypted_string = "".join(encrypted_string.content_list)
         return encrypted_string
-
-
 
     def get_shift_value(self):
         self.shift = input("Please insert the offset/vector (Press Enter for a random value): ")
@@ -44,3 +50,6 @@ class CaesarEncryption(Encryption):
             return int(self.shift)
         except ValueError:
             return self.shift
+
+
+SqlAlchemyBase.metadata.create_all(engine)
