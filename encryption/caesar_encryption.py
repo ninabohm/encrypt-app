@@ -1,8 +1,11 @@
-from encryption.encryption_base import Encryption
-from encryption.encrypted_string import EncryptedString
-import random, logging
-from sqlalchemy import Column, Integer, String, create_engine
+import logging
+import random
+import string
+
+from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+
+from encryption.encrypted_string import EncryptedString
 
 logger = logging.getLogger(__name__)
 
@@ -10,12 +13,17 @@ SqlAlchemyBase = declarative_base()
 engine = create_engine("sqlite:///data.db", echo=True)
 
 
-class CaesarEncryption(Encryption):
+class CaesarEncryption(SqlAlchemyBase):
 
     __tablename__ = "caesar_encryption"
 
     id = Column(Integer, primary_key=True)
     shift = Column(Integer)
+
+    def __init__(self):
+        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
+        self.shift = ""
+        self.user_input = ""
 
     def encrypt_input(self, user_input):
         shift = self.get_shift_value()
@@ -28,13 +36,13 @@ class CaesarEncryption(Encryption):
                 encrypted_string.content_list[pos] = self.alphabet[0]
             else:
                 y = self.alphabet.index(user_input[pos])
-                
-                if y + shift > len(self.alphabet): 
+
+                if y + shift > len(self.alphabet):
                     rest = shift % len(self.alphabet)
                     difference = len(self.alphabet) - y
                     rest = rest - difference
                     encrypted_string.content_list[pos] = self.alphabet[rest]
-                else: 
+                else:
                     encrypted_string.content_list[pos] = self.alphabet[y + shift]
 
         encrypted_string = "".join(encrypted_string.content_list)
@@ -51,6 +59,20 @@ class CaesarEncryption(Encryption):
             return int(self.shift)
         except ValueError:
             return self.shift
+
+    def get_user_input_from_cli(self):
+        self.user_input = input()
+        try:
+            self.validate_input(self.user_input)
+        except ValueError as error:
+            logger.info(error)
+            self.get_user_input_from_cli()
+        return self.user_input
+
+    def validate_input(self, user_input):
+        for char in user_input:
+            if char not in self.alphabet and char != " ":
+                raise ValueError("Sorry, only no special characters allowed. Please try again.")
 
 
 SqlAlchemyBase.metadata.create_all(engine)
