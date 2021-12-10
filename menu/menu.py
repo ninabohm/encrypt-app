@@ -1,4 +1,4 @@
-from encryption.caesar_encryption import CaesarEncryption
+from model.models import CaesarEncryption
 from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
