@@ -1,8 +1,5 @@
 import unittest
-from unittest.mock import patch
-from user.user import User
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from model.models import User
 
 
 class TestUser(unittest.TestCase):

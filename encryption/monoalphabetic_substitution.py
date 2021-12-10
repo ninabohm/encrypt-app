@@ -1,7 +1,7 @@
-from encryption.encrypted_string import EncryptedString
+from model.models import EncryptedString
 import string
 import logging
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
 logger = logging.getLogger(__name__)

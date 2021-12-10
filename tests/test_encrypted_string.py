@@ -1,5 +1,4 @@
 import unittest
-from encryption.encrypted_string import EncryptedString
 
 
 class TestEncryptedString(unittest.TestCase):

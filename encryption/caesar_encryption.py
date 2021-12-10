@@ -5,7 +5,7 @@ import string
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
-from encryption.encrypted_string import EncryptedString
+from model.models import EncryptedString
 
 logger = logging.getLogger(__name__)
 

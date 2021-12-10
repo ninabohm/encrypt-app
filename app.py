@@ -1,10 +1,10 @@
 import logging, sys
 from menu.menu import Menu
-from user.user import User
-from encryption.encrypted_string import EncryptedString
-from sqlalchemy import create_engine, inspect
+from model.models import User
+from model.models import EncryptedString
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
@@ -26,18 +26,16 @@ class App:
         try:
             self.check_if_user_exists(user_name)
             logger.info(f"Login for user {user_name} successful")
+            return user
         except NoResultFound:
             logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
             session.add(user)
             session.commit()
             logger.info(f"User with name {user.name} created")
-
-            users = session.query(User)
-            for user in users.all():
-                print(user.name)
-
+            return user
         except MultipleResultsFound:
             logger.info(f"User with name {user_name} exists already more than once. Login successful.")
+            return user
 
     def check_if_user_exists(self, user_name: str):
         return session.query(User).filter_by(name=user_name).one()
@@ -45,12 +43,13 @@ class App:
     def create_menu(self):
         self.menu = Menu()
 
-    def keep_alive(self, session):
+    def keep_alive(self):
         while True:
             encryption = self.menu.define_encryption_type_or_exit()
             print("Please insert a string ")
             encryption.get_user_input_from_cli()
             encrypted_string = EncryptedString(encryption.encrypt_input(encryption.user_input))
+            user.encrypted_strings.append(encrypted_string)
             session.add(encrypted_string)
             session.commit()
             print(encrypted_string.content)
@@ -64,9 +63,9 @@ if __name__ == "__main__":
     session = Session()
 
     app = App()
-    app.start()
+    user = app.start()
     app.create_menu()
-    app.keep_alive(session)
+    app.keep_alive()
     session.commit()
 
 
