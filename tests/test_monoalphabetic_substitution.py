@@ -29,4 +29,5 @@ class TestMonoalphabeticSubstitution(unittest.TestCase):
         self.assertEqual(self.mock_encryption.get_user_input_from_cli(), "ab cd    ")
 
     def test_should_raise_Exception_given_input_with_special_characters(self):
-        with self.assertRaises(ValueError): self.mock_encryption.validate_input("äöü")
+        with self.assertRaises(ValueError):
+            self.mock_encryption.validate_input("äöü")
