@@ -22,34 +22,33 @@ class App:
     def start(self):
         logging.info("Application up and running")
         user_name = input("Please insert your name to login. You'll be registered automatically if you have no account yet.: ")
-        user = User(user_name)
         try:
             self.check_if_user_exists(user_name)
             logger.info(f"Login for user {user_name} successful")
+            user = session.query(User).filter_by(name=user_name).first()
             return user
         except NoResultFound:
             logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
+            user = User(user_name)
             session.add(user)
             session.commit()
             logger.info(f"User with name {user.name} created")
             return user
         except MultipleResultsFound:
-            logger.info(f"User with name {user_name} exists already more than once. Login successful.")
+            logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
+            user = session.query(User).filter_by(name=user_name).first()
             return user
 
     def check_if_user_exists(self, user_name: str):
         return session.query(User).filter_by(name=user_name).one()
 
-    def create_menu(self):
-        self.menu = Menu()
-
     def keep_alive(self):
         while True:
-            encryption = self.menu.define_encryption_type_or_exit()
+            encryption = menu.define_encryption_type_or_exit()
             print("Please insert a string ")
-            encryption.get_user_input_from_cli()
-            encrypted_string = EncryptedString(encryption.encrypt_input(encryption.user_input))
-            user.encrypted_strings.append(encrypted_string)
+            user_input = encryption.get_user_input_from_cli()
+            encrypted_string = EncryptedString(encryption.encrypt_input(user_input))
+            user_curr.encrypted_strings.append(encrypted_string)
             session.add(encrypted_string)
             session.commit()
             print(encrypted_string.content)
@@ -63,8 +62,8 @@ if __name__ == "__main__":
     session = Session()
 
     app = App()
-    user = app.start()
-    app.create_menu()
+    user_curr = app.start()
+    menu = Menu()
     app.keep_alive()
     session.commit()
 

@@ -12,8 +12,8 @@ class TestApp(unittest.TestCase):
 
     @patch('builtins.input', lambda *args: "1")
     def test_should_return_True_given_user_option_1(self):
-        self.mock_app.create_menu()
-        self.assertIsInstance(self.mock_app.menu, Menu)
+        menu = Menu()
+        self.assertIsInstance(menu, Menu)
 
     #TODO: mock database for tests
     # def test_should_raise_NoResultFound_given_user_foo2_does_not_exist(self):
