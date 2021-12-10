@@ -26,12 +26,12 @@ class CaesarEncryption(SqlAlchemyBase):
 
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
-        self.shift = ""
         self.user_input = ""
+        self.shift = 0
         SqlAlchemyBase.metadata.create_all(engine)
 
     def encrypt_input(self, user_input):
-        shift = self.get_shift_value()
+        self.shift = self.get_shift_value()
         # session.add(shift)
         # session.commit()
         encrypted_string = EncryptedString(user_input)
@@ -44,28 +44,31 @@ class CaesarEncryption(SqlAlchemyBase):
             else:
                 y = self.alphabet.index(user_input[pos])
 
-                if y + shift > len(self.alphabet):
-                    rest = shift % len(self.alphabet)
+                if y + self.shift > len(self.alphabet):
+                    rest = self.shift % len(self.alphabet)
                     difference = len(self.alphabet) - y
                     rest = rest - difference
                     encrypted_string.content_list[pos] = self.alphabet[rest]
                 else:
-                    encrypted_string.content_list[pos] = self.alphabet[y + shift]
+                    encrypted_string.content_list[pos] = self.alphabet[y + self.shift]
 
         encrypted_string = "".join(encrypted_string.content_list)
         return encrypted_string
 
     def get_shift_value(self):
-        self.shift = input("Please insert the offset/vector (Press Enter for a random value): ")
-        if self.shift == "":
-            self.shift = random.randint(0, 1024)
-            logger.info(f"User chose shift of {self.shift} ")
+        shift_value = input("Please insert the offset/vector (Press Enter for a random value): ")
+        if shift_value == "":
+            shift_value = random.randint(0, 1024)
+            logger.info(f"User chose shift of {shift_value} ")
         else:
-            logger.info(f"User chose shift of {self.shift}")
-        try:
-            return int(self.shift)
-        except ValueError:
-            return self.shift
+            try:
+                shift_value = int(shift_value)
+                logger.info(f"User chose shift of {shift_value}")
+                return shift_value
+            except ValueError:
+                shift_value = int(shift_value)
+                logger.info(f"User chose shift of {shift_value}")
+                return shift_value
 
     def get_user_input_from_cli(self):
         self.user_input = input()
