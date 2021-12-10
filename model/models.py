@@ -28,6 +28,9 @@ class EncryptedString(SqlAlchemyBase):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="encrypted_strings")
 
+    #encrypt_type_id = Column(Integer, ForeignKey("caesar_encryption.id"))
+    #encrypt_type = relationship("CaesarEncryption", back_populates="encrypted_strings")
+
     def __init__(self, input_string: str):
         self.content_list = list(input_string)
         self.content = "".join(self.content_list)

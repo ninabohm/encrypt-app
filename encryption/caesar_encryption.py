@@ -5,6 +5,8 @@ import string
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
+from sqlalchemy.orm import relationship
+
 from model.models import EncryptedString
 
 logger = logging.getLogger(__name__)
@@ -20,13 +22,18 @@ class CaesarEncryption(SqlAlchemyBase):
     id = Column(Integer, primary_key=True)
     shift = Column(Integer)
 
+    #encrypted_strings = relationship("EncryptedString", back_populates="encrypt_type")
+
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
         self.shift = ""
         self.user_input = ""
+        SqlAlchemyBase.metadata.create_all(engine)
 
     def encrypt_input(self, user_input):
         shift = self.get_shift_value()
+        # session.add(shift)
+        # session.commit()
         encrypted_string = EncryptedString(user_input)
 
         for pos in range(len(user_input)):
@@ -75,4 +82,4 @@ class CaesarEncryption(SqlAlchemyBase):
                 raise ValueError("Sorry, only no special characters allowed. Please try again.")
 
 
-SqlAlchemyBase.metadata.create_all(engine)
+

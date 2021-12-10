@@ -1,5 +1,12 @@
 from encryption.caesar_encryption import CaesarEncryption
 from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
+SqlAlchemyBase = declarative_base()
+engine = create_engine("sqlite:///data.db")
 
 
 class Menu:
@@ -17,14 +24,27 @@ class Menu:
         print("4: Quit program")
 
     def define_encryption_type_or_exit(self):
+        SqlAlchemyBase.metadata.create_all(engine)
+        Session = sessionmaker(engine)
+        session = Session()
+
         if self.option == "1":
-            return CaesarEncryption()
+            encryption = CaesarEncryption()
+            session.add(encryption)
+            session.commit()
+            return encryption
 
         if self.option == "2":
-            return MonoalphabeticSubstitution()
+            encryption = MonoalphabeticSubstitution()
+            session.add(encryption)
+            session.commit()
+            return encryption
 
         if self.option == "3":
             print("Learn more about the app on https://gitlab.rz.htw-berlin.de/schroedr/vl2022_ina/")
 
         if self.option == "4":
             exit()
+
+
+

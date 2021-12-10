@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 
 class App:
 
-    def start(self):
+    def get_user(self):
         logging.info("Application up and running")
-        user_name = input("Please insert your name to login. You'll be registered automatically if you have no account yet.: ")
+        user_name = input("Please login with your first name. You'll be registered automatically if you have no account yet.: ")
         try:
             self.check_if_user_exists(user_name)
             logger.info(f"Login for user {user_name} successful")
@@ -47,7 +47,8 @@ class App:
             encryption = menu.define_encryption_type_or_exit()
             print("Please insert a string ")
             user_input = encryption.get_user_input_from_cli()
-            encrypted_string = EncryptedString(encryption.encrypt_input(user_input))
+            encryption_content = encryption.encrypt_input(user_input)
+            encrypted_string = EncryptedString(encryption_content)
             user_curr.encrypted_strings.append(encrypted_string)
             session.add(encrypted_string)
             session.commit()
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     session = Session()
 
     app = App()
-    user_curr = app.start()
+    user_curr = app.get_user()
     menu = Menu()
     app.keep_alive()
     session.commit()
