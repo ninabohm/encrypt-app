@@ -45,11 +45,13 @@ class App:
     def keep_alive(self):
         while True:
             encryption = menu.define_encryption_type_or_exit()
-            print("Please insert a string ")
             user_input = encryption.get_user_input_from_cli()
-            encryption_content = encryption.encrypt_input(user_input)
-            encrypted_string = EncryptedString(encryption_content)
+            user_shift = encryption.get_shift_value()
+            session.add(encryption)
+            encryption_content = encryption.encrypt_input(user_input, user_shift)
+            encrypted_string = EncryptedString(encryption_content, encryption)
             user_curr.encrypted_strings.append(encrypted_string)
+
             session.add(encrypted_string)
             session.commit()
             print(encrypted_string.content)
