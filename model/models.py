@@ -43,27 +43,25 @@ class CaesarEncryption(SqlAlchemyBase):
 
     def encrypt_input(self, user_input, user_shift):
         self.shift = user_shift
-        encrypted_string = "käsekuchen"
-        # encrypted_string = EncryptedString(user_input, self.type)
-        # # TODO: this encrypted string is the cause of the double generation in the db, remove it
-        #
-        # for pos in range(len(user_input)):
-        #     if user_input[pos] == " ":
-        #         encrypted_string.content_list[pos] = " "
-        #     elif user_input[pos] == "~":
-        #         encrypted_string.content_list[pos] = self.alphabet[0]
-        #     else:
-        #         y = self.alphabet.index(user_input[pos])
-        #
-        #         if y + self.shift > len(self.alphabet):
-        #             rest = self.shift % len(self.alphabet)
-        #             difference = len(self.alphabet) - y
-        #             rest = rest - difference
-        #             encrypted_string.content_list[pos] = self.alphabet[rest]
-        #         else:
-        #             encrypted_string.content_list[pos] = self.alphabet[y + self.shift]
-        #
-        # encrypted_string = "".join(encrypted_string.content_list)
+        encrypted_string = list(user_input)
+
+        for pos in range(len(user_input)):
+            if user_input[pos] == " ":
+                encrypted_string[pos] = " "
+            elif user_input[pos] == "~":
+                encrypted_string[pos] = self.alphabet[0]
+            else:
+                y = self.alphabet.index(user_input[pos])
+
+                if y + self.shift > len(self.alphabet):
+                    rest = self.shift % len(self.alphabet)
+                    difference = len(self.alphabet) - y
+                    rest = rest - difference
+                    encrypted_string[pos] = self.alphabet[rest]
+                else:
+                    encrypted_string[pos] = self.alphabet[y + self.shift]
+
+        encrypted_string = "".join(encrypted_string)
         return encrypted_string
 
     def get_user_input_from_cli(self):
