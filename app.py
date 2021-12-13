@@ -49,12 +49,14 @@ class App:
             user_shift = encryption.get_shift_value()
             session.add(encryption)
             encryption_content = encryption.encrypt_input(user_input, user_shift)
-            encrypted_string = EncryptedString(encryption_content, encryption)
-            user_curr.encrypted_strings.append(encrypted_string)
-
-            session.add(encrypted_string)
-            session.commit()
-            print(encrypted_string.content)
+            try:
+                encrypted_string = EncryptedString(encryption_content, encryption)
+                user_curr.encrypted_strings.append(encrypted_string)
+                session.add(encrypted_string)
+                session.commit()
+                print(encrypted_string.content)
+            except KeyError as error:
+                print(error)
 
 
 if __name__ == "__main__":

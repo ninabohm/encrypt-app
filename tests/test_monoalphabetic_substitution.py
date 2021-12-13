@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
+from model.models import MonoalphabeticSubstitution
 
 
 class TestMonoalphabeticSubstitution(unittest.TestCase):

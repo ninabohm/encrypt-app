@@ -1,5 +1,5 @@
 from model.models import CaesarEncryption
-from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
+from model.models import MonoalphabeticSubstitution
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
