@@ -143,8 +143,9 @@ class EncryptedString(SqlAlchemyBase):
     id = Column(Integer, primary_key=True)
     content = Column(String)
     encryption_type = Column(String)
+
     encryption_base_id = Column(ForeignKey("encryption_base.id"))
-    encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings")
+    encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings", uselist=False)
 
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="encrypted_strings", uselist=False)
