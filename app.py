@@ -50,7 +50,7 @@ class App:
             session.add(encryption)
             encryption_content = encryption.encrypt_input(user_input, user_shift)
             try:
-                encrypted_string = EncryptedString(encryption_content, encryption)
+                encrypted_string = EncryptedString(encryption_content, encryption.type)
                 encryption.encrypted_strings.append(encrypted_string)
                 user_curr.encrypted_strings.append(encrypted_string)
 

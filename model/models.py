@@ -146,7 +146,7 @@ class EncryptedString(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True)
     content = Column(String)
-    #encryption_type = Column(String)
+    encryption_type = Column(String)
     encryption_base_id = Column(ForeignKey("encryption_base.id"))
     encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings")
 
