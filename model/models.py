@@ -19,7 +19,7 @@ class User(SqlAlchemyBase):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
 
-    #encrypted_strings = relationship("EncryptedString", back_populates="user")
+    encrypted_strings = relationship("EncryptedString", back_populates="user")
 
     def __init__(self, name: str):
         self.name = name
@@ -150,10 +150,8 @@ class EncryptedString(SqlAlchemyBase):
     encryption_base_id = Column(ForeignKey("encryption_base.id"))
     encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings")
 
-
-    # user_id = Column(Integer, ForeignKey("user.id"))
-    # user = relationship("User", back_populates="encrypted_strings")
-
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User", back_populates="encrypted_strings")
 
     def __init__(self, input_string, encryption_type):
         self.content_list = list(input_string)

@@ -52,7 +52,7 @@ class App:
             try:
                 encrypted_string = EncryptedString(encryption_content, encryption)
                 encryption.encrypted_strings.append(encrypted_string)
-                #user_curr.encrypted_strings.append(encrypted_string)
+                user_curr.encrypted_strings.append(encrypted_string)
 
                 session.add(encrypted_string)
                 session.commit()
