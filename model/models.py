@@ -18,6 +18,7 @@ class User(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
+
     #encrypted_strings = relationship("EncryptedString", back_populates="user")
 
     def __init__(self, name: str):
@@ -31,6 +32,7 @@ class EncryptionBase(SqlAlchemyBase):
     id = Column(Integer, primary_key=True)
     type = Column(String)
     shift = Column(Integer)
+    encrypted_strings = relationship("EncryptedString", back_populates="encryption_base")
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -63,7 +65,6 @@ class CaesarEncryption(EncryptionBase):
         'polymorphic_identity': 'caesar'
     }
 
-    # encrypted_strings = relationship("EncryptedString", back_populates="encryption_type")
 
     def __init__(self):
         super().__init__()
@@ -145,15 +146,14 @@ class EncryptedString(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True)
     content = Column(String)
+    #encryption_type = Column(String)
+    encryption_base_id = Column(ForeignKey("encryption_base.id"))
+    encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings")
+
 
     # user_id = Column(Integer, ForeignKey("user.id"))
     # user = relationship("User", back_populates="encrypted_strings")
 
-    # encryption_type_id = Column(Integer, ForeignKey("caesar_encryption.id"))
-    # encryption_type = relationship("CaesarEncryption", back_populates="encrypted_strings")
-
-    # encryption_type_id_mono = Column(Integer, ForeignKey("mono_encryption.id"))
-    # encryption_type_mono = relationship("MonoalphabeticSubstitution", back_populates="encrypted_strings_mono")
 
     def __init__(self, input_string, encryption_type):
         self.content_list = list(input_string)
