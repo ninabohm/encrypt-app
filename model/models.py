@@ -18,24 +18,56 @@ class User(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
-    encrypted_strings = relationship("EncryptedString", back_populates="user")
+    #encrypted_strings = relationship("EncryptedString", back_populates="user")
 
     def __init__(self, name: str):
         self.name = name
 
 
-class CaesarEncryption(SqlAlchemyBase):
+class EncryptionBase(SqlAlchemyBase):
 
-    __tablename__ = "caesar_encryption"
+    __tablename__ = "encryption_base"
 
     id = Column(Integer, primary_key=True)
     type = Column(String)
     shift = Column(Integer)
 
-    encrypted_strings = relationship("EncryptedString", back_populates="encryption_type")
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'encryption_base'
+    }
 
     def __init__(self):
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
+
+    def get_user_input_from_cli(self):
+        user_input = input("Please insert a string ")
+        try:
+            self.validate_input(user_input)
+        except ValueError as error:
+            logger.info(error)
+            self.get_user_input_from_cli()
+        return user_input
+
+    def validate_input(self, user_input):
+        for char in user_input:
+            if char not in self.alphabet and char != " ":
+                raise ValueError("Sorry, only no special characters allowed. Please try again.")
+
+
+class CaesarEncryption(EncryptionBase):
+
+    caesar_data = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'caesar'
+    }
+
+    # encrypted_strings = relationship("EncryptedString", back_populates="encryption_type")
+
+    def __init__(self):
+        super().__init__()
+        #self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
         self.type = "caesar"
         self.shift = 0
 
@@ -62,20 +94,6 @@ class CaesarEncryption(SqlAlchemyBase):
         encrypted_string = "".join(encrypted_string)
         return encrypted_string
 
-    def get_user_input_from_cli(self):
-        user_input = input("Please insert a string ")
-        try:
-            self.validate_input(user_input)
-        except ValueError as error:
-            logger.info(error)
-            self.get_user_input_from_cli()
-        return user_input
-
-    def validate_input(self, user_input):
-        for char in user_input:
-            if char not in self.alphabet and char != " ":
-                raise ValueError("Sorry, only no special characters allowed. Please try again.")
-
     def get_shift_value(self):
         shift_value = input("Please insert the offset/vector (Press Enter for a random value): ")
         if shift_value == "":
@@ -92,18 +110,16 @@ class CaesarEncryption(SqlAlchemyBase):
                 return shift_value
 
 
-class MonoalphabeticSubstitution(SqlAlchemyBase):
+class MonoalphabeticSubstitution(EncryptionBase):
 
-    __tablename__ = "mono_encryption"
-
-    id = Column(Integer, primary_key=True)
-    type = Column(String)
-    shift = Column(Integer)
-
-    encrypted_strings_mono = relationship("EncryptedString", back_populates="encryption_type_mono")
+    monoalphabetic_data = Column(String)
+    __mapper_args__ = {
+        'polymorphic_identity': 'monoalphabetic_substitution'
+    }
+    #encrypted_strings_mono = relationship("EncryptedString", back_populates="encryption_type_mono")
 
     def __init__(self):
-        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
+        super().__init__()
         self.type = "monoalphabetic_substitution"
 
     def encrypt_input(self, user_input, user_shift):
@@ -119,20 +135,6 @@ class MonoalphabeticSubstitution(SqlAlchemyBase):
         encrypted_string = "".join(encrypted_string)
         return encrypted_string
 
-    def get_user_input_from_cli(self):
-        user_input = input("Please insert a string ")
-        try:
-            self.validate_input(user_input)
-        except ValueError as error:
-            logger.info(error)
-            self.get_user_input_from_cli()
-        return user_input
-
-    def validate_input(self, user_input):
-        for char in user_input:
-            if char not in self.alphabet and char != " ":
-                raise ValueError("Sorry, no special characters allowed. Please try again.")
-
     def get_shift_value(self):
         return 0
 
@@ -144,14 +146,14 @@ class EncryptedString(SqlAlchemyBase):
     id = Column(Integer, primary_key=True)
     content = Column(String)
 
-    user_id = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User", back_populates="encrypted_strings")
+    # user_id = Column(Integer, ForeignKey("user.id"))
+    # user = relationship("User", back_populates="encrypted_strings")
 
-    encryption_type_id = Column(Integer, ForeignKey("caesar_encryption.id"))
-    encryption_type = relationship("CaesarEncryption", back_populates="encrypted_strings")
+    # encryption_type_id = Column(Integer, ForeignKey("caesar_encryption.id"))
+    # encryption_type = relationship("CaesarEncryption", back_populates="encrypted_strings")
 
-    encryption_type_id_mono = Column(Integer, ForeignKey("mono_encryption.id"))
-    encryption_type_mono = relationship("MonoalphabeticSubstitution", back_populates="encrypted_strings_mono")
+    # encryption_type_id_mono = Column(Integer, ForeignKey("mono_encryption.id"))
+    # encryption_type_mono = relationship("MonoalphabeticSubstitution", back_populates="encrypted_strings_mono")
 
     def __init__(self, input_string, encryption_type):
         self.content_list = list(input_string)

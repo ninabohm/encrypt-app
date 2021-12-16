@@ -51,12 +51,15 @@ class App:
             encryption_content = encryption.encrypt_input(user_input, user_shift)
             try:
                 encrypted_string = EncryptedString(encryption_content, encryption)
-                user_curr.encrypted_strings.append(encrypted_string)
-                session.add(encrypted_string)
+                #user_curr.encrypted_strings.append(encrypted_string)
+                #session.add(encrypted_string)
                 session.commit()
                 print(encrypted_string.content)
             except KeyError as error:
-                print(error)
+                print(f"error: {error}")
+
+
+
 
 
 if __name__ == "__main__":

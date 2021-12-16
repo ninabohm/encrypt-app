@@ -30,13 +30,13 @@ class Menu:
 
         if self.option == "1":
             encryption = CaesarEncryption()
-            session.add(encryption)
+            #session.add(encryption)
             session.commit()
             return encryption
 
         if self.option == "2":
             encryption = MonoalphabeticSubstitution()
-            session.add(encryption)
+            #session.add(encryption)
             session.commit()
             return encryption
 
