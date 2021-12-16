@@ -60,7 +60,6 @@ class EncryptionBase(SqlAlchemyBase):
 class CaesarEncryption(EncryptionBase):
 
     caesar_data = Column(String)
-
     __mapper_args__ = {
         'polymorphic_identity': 'caesar'
     }
@@ -68,7 +67,6 @@ class CaesarEncryption(EncryptionBase):
 
     def __init__(self):
         super().__init__()
-        #self.alphabet = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
         self.type = "caesar"
         self.shift = 0
 
@@ -117,7 +115,6 @@ class MonoalphabeticSubstitution(EncryptionBase):
     __mapper_args__ = {
         'polymorphic_identity': 'monoalphabetic_substitution'
     }
-    #encrypted_strings_mono = relationship("EncryptedString", back_populates="encryption_type_mono")
 
     def __init__(self):
         super().__init__()
