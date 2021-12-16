@@ -64,7 +64,6 @@ class CaesarEncryption(EncryptionBase):
         'polymorphic_identity': 'caesar'
     }
 
-
     def __init__(self):
         super().__init__()
         self.type = "caesar"
@@ -148,7 +147,7 @@ class EncryptedString(SqlAlchemyBase):
     encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings")
 
     user_id = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User", back_populates="encrypted_strings")
+    user = relationship("User", back_populates="encrypted_strings", uselist=False)
 
     def __init__(self, input_string, encryption_type):
         self.content_list = list(input_string)
