@@ -2,6 +2,7 @@ import logging, sys
 from menu.menu import Menu
 from model.models import User
 from model.models import EncryptedString
+from model.models import EncryptionBase
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -47,18 +48,19 @@ class App:
             encryption = menu.define_encryption_type_or_exit()
             user_input = encryption.get_user_input_from_cli()
             user_shift = encryption.get_shift_value()
-            session.add(encryption)
             encryption_content = encryption.encrypt_input(user_input, user_shift)
+            session.add(encryption)
             try:
-                encrypted_string = EncryptedString(encryption_content, encryption.type)
+                encrypted_string = EncryptedString(encryption_content, encryption, user_curr)
                 encryption.encrypted_strings.append(encrypted_string)
-                user_curr.encrypted_strings.append(encrypted_string)
-
                 session.add(encrypted_string)
                 session.commit()
                 print(encrypted_string.content)
             except KeyError as error:
                 print(f"error: {error}")
+
+    def check_if_encryption_type_exists(self, type:str):
+        return session.query(EncryptionBase).filter_by(type=type)
 
 
 if __name__ == "__main__":
