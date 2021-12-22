@@ -12,9 +12,13 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/encryption", methods=['GET'])
+@app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
-    return render_template("encryption.html")
+    user_name = request.form.get("user")
+    return render_template(
+        "encryption.html",
+        user=user_name
+    )
 
 
 @app.route("/result", methods=['POST'])

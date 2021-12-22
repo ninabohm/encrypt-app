@@ -11,14 +11,15 @@
 </head>
 <body>
 <h1>Encryption</h1>
+<p>Hello {{user}}!</p>
 <form class="encryption-form" action="/result" method="POST">
     <div>
         <input id="caesar" type="radio" name="encryption_base" value="caesar" checked>
         <label class="label-1" for="caesar">Caesar Encryption</label>
     </div>
     <div>
-        <label class="label-2" for="shift">Shift (0-1024)</label>
-        <input class="form-number" id="shift" type="number" name="shift" min="0" max="1024">
+        <label class="label-2" for="shift">Shift (1-1024)</label>
+        <input class="form-number" id="shift" type="number" name="shift" min="1" max="1024" value="1">
     </div>
     <div>
         <input id="mono" type="radio" name="encryption_base" value="mono">
