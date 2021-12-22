@@ -12,6 +12,12 @@
 <h1>Encryption</h1>
 <form class="encryption-form" action="/result" method="POST">
     <div>
+        <input id="caesar" type="radio" name="encryption_base" value="caesar" checked>
+        <label class="label-1" for="caesar">Caesar Encryption</label>
+        <input id="mono" type="radio" name="encryption_base" value="mono">
+        <label class="label-1" for="mono">Monoalphabetic Substitution</label>
+    </div>
+    <div>
         <label class="label-1" for="user_input" hidden>Input</label>
         <input id="user_input" type="text" class="form-control" required autofocus placeholder="Type your word to encrypt here"><br>
     </div>
