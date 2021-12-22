@@ -1,3 +1,10 @@
+/*colors {*/
+/*   darkblue: #003366;*/
+/*    lightblue: #3399FF;*/
+/*    yellow: #FFCC99;*/
+/*    orange: #FF9966;*/
+/*}*/
+
 body {
     font-family: Helvetica, sans-serif;
     padding-right: 15px;
@@ -42,10 +49,18 @@ body {
 .btn-primary:hover{
     background-color: royalblue;
     border-radius: 400px;
-    padding-top: 16px;
-    padding-right: 48px;
-    padding-bottom: 16px;
-    padding-left: 48px;
+    padding: 16px 48px;
+    position: relative;
+    font-weight: 700;
+    line-height: 24px;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #FFCC99;
+    text-decoration: none;
+    border-radius: 400px;
+    padding: 16px 48px;
     position: relative;
     font-weight: 700;
     line-height: 24px;
