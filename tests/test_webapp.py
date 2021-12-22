@@ -36,8 +36,3 @@ class TestWebapp(unittest.TestCase):
             response = client.get("/encryption")
             assert response._status_code == 200
 
-    def test_given_post_to_result_endpoint_returns_200(self):
-        with app.test_client() as client:
-            response = client.post("/result")
-            assert response._status_code == 200
-
