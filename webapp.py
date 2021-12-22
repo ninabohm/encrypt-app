@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from model.models import EncryptedString
 from model.models import CaesarEncryption
+from model.models import MonoalphabeticSubstitution
 from model.models import User
 
 app = Flask(__name__)
@@ -21,19 +22,23 @@ def result():
     encryption_base = request.form.get("encryption_base")
     user_input = request.form.get("user_input")
     shift = int(request.form.get("shift"))
+    user = User("testuser")
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()
-        user = User("testuser")
-        encryption_content = encryption.encrypt_input(user_input, shift)
-        encrypted_string = EncryptedString(encryption_content, encryption, user).content
+    else:
+        encryption = MonoalphabeticSubstitution()
+        shift = 0
+
+    encryption_content = encryption.encrypt_input(user_input, shift)
+    encrypted_string = EncryptedString(encryption_content, encryption, user).content
 
     return render_template(
         "result.html",
         encryption_base=encryption_base,
         shift=shift,
         user_input=user_input,
-        encrypted_string = encrypted_string
+        encrypted_string=encrypted_string
     )
 
 

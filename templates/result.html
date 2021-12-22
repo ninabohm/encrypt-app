@@ -13,11 +13,12 @@
 <h1>Encryption Result</h1>
 <form class="encryption-form">
     <div>
-        <p>Encryption type chosen: {{encryption_base}}</p>
-        <p>user input: {{user_input}}</p>
-        <p>shift: {{shift}}</p>
-        <label class="label-1" for="encrypted_string" hidden>Encrypted string</label>
-        <p id="encrypted_string">Encrypted string: {{encrypted_string}}<br>
+        <label class="label-1" for="encryption_base">Encryption type chosen</label>
+        <p id="encryption_base">{{encryption_base}}</p>
+    </div>
+    <div>
+        <label class="label-1" for="encrypted_string">Your encrypted word</label>
+        <input id=encrypted_string"" name="encrypted_string" type="text" class="form-control" readonly value="{{encrypted_string}}"><br>
     </div>
     <br>
     <div>
