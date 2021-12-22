@@ -19,7 +19,7 @@ body {
 }
 
 .form-control {
-    margin-top: 5px;
+    margin-top: 20px;
     margin-bottom: 5px;
     border-radius: 4px;
     border-width: 0.5px;
@@ -35,6 +35,18 @@ body {
     padding-bottom: 8px;
 }
 
+.label-2 {
+    font-size: 14px;
+    letter-spacing: 0.25px;
+    line-height: 20px;
+    font-weight: 400;
+    padding-bottom: 8px;
+    padding-left: 25px;
+}
+
+.form-number {
+    width: 20%;
+}
 
 .btn-primary {
     background-color: dodgerblue;
@@ -66,6 +78,7 @@ body {
     line-height: 24px;
     border: none;
 }
+
 
 input[type=range] {
     width: 100%;

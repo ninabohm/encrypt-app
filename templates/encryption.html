@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="shortcut icon" href="../static/favicon.ico">
     <title>Encryption</title>
 </head>
 <body>
@@ -14,12 +15,18 @@
     <div>
         <input id="caesar" type="radio" name="encryption_base" value="caesar" checked>
         <label class="label-1" for="caesar">Caesar Encryption</label>
+    </div>
+    <div>
+        <label class="label-2" for="shift">Shift (0-1024)</label>
+        <input class="form-number" id="shift" type="number" name="shift">
+    </div>
+    <div>
         <input id="mono" type="radio" name="encryption_base" value="mono">
         <label class="label-1" for="mono">Monoalphabetic Substitution</label>
     </div>
     <div>
         <label class="label-1" for="user_input" hidden>Input</label>
-        <input id="user_input" type="text" class="form-control" required autofocus placeholder="Type your word to encrypt here"><br>
+        <input id="user_input" name="user_input" type="text" class="form-control" required autofocus placeholder="Type your word to encrypt here"><br>
     </div>
     <br>
     <div>
