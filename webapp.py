@@ -1,14 +1,47 @@
+import random
+import string
+import logging
 from flask import Flask, request, render_template
 from model.models import EncryptedString
 from model.models import CaesarEncryption
 from model.models import MonoalphabeticSubstitution
 from model.models import User
+from flask_sqlalchemy import SQLALchemy
+from sqlalchemy import SQLAlchemy
+from app import check_if_user_exists
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
+logger = logging.getLogger(__name__)
+
+POSTGRES = {
+    'user': 'postgres',
+    'pw': 'xina',
+    'db': 'uebung',
+    'host': 'localhost',
+    'port': '5432',
+}
 app = Flask(__name__)
+app.config['DEBUG'] = True
+app.config['SWLQLCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(db)s' % POSTGRES
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
-@app.route("/")
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        user_name = request.form.get("user")
+        try:
+            check_if_user_exists(user_name)
+            user = db.session.query(User).filter_by(name=user_name).first()
+            return user
+        except NoResultFound:    
+            new_user = User(name=request.form["user"])
+            db.session.add(new_user)
+            db.session.commit()
+    ##users = db.session.query(User).all()
+    ##return render_template("index.html", users=users)
     return render_template("index.html")
 
 
@@ -30,6 +63,20 @@ def result():
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()
+        ##shift = encryption.get_shift_value()
+        shift = request.form.get["shift"]
+        if shift == "":
+            shift_value = random.randint(0, 1024)
+            logger.info(f"User chose shift of {shift_value} ")
+        else:
+            try:
+                shift_value = int(shift)
+                logger.info(f"User chose shift of {shift_value}")
+                return shift_value
+            except ValueError:
+                shift_value = int(shift_value)
+                logger.info(f"User chose shift of {shift_value}")
+                return shift_value
     else:
         encryption = MonoalphabeticSubstitution()
         shift = 0
