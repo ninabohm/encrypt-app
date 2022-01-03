@@ -6,7 +6,6 @@ from model.models import CaesarEncryption
 from model.models import MonoalphabeticSubstitution
 from model.models import User
 from flask_sqlalchemy import SQLAlchemy
-from app import App
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 logger = logging.getLogger(__name__)
