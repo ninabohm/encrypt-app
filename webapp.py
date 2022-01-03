@@ -13,19 +13,11 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 logger = logging.getLogger(__name__)
 
-POSTGRES = {
-    'user': 'postgres',
-    'pw': 'xina',
-    'db': 'uebung',
-    'host': 'localhost',
-    'port': '5432',
-}
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SWLQLCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(db)s' % POSTGRES
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
 
 
 @app.route("/", methods=['GET', 'POST'])
