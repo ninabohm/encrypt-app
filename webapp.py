@@ -5,16 +5,15 @@ from model.models import EncryptedString
 from model.models import CaesarEncryption
 from model.models import MonoalphabeticSubstitution
 from model.models import User
-#from flask_sqlalchemy import SQLALchemy
-from sqlalchemy import SQLAlchemy
-from app import check_if_user_exists
+from flask_sqlalchemy import SQLAlchemy
+from app import App
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SWLQLCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -24,7 +23,7 @@ def index():
     if request.method == 'POST':
         user_name = request.form.get("user")
         try:
-            check_if_user_exists(user_name)
+            #check_if_user_exists(user_name)
             user = db.session.query(User).filter_by(name=user_name).first()
             return user
         except NoResultFound:    

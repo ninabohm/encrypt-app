@@ -1,8 +1,5 @@
 import unittest
-from unittest.mock import patch
-from io import StringIO
 from model.models import MonoalphabeticSubstitution
-from app import App
 
 
 class TestMonoalphabeticSubstitution(unittest.TestCase):

@@ -1,5 +1,4 @@
 import unittest
-from flask import url_for
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import logging
