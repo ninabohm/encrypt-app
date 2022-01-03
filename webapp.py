@@ -1,12 +1,11 @@
 import random
-import string
 import logging
 from flask import Flask, request, render_template
 from model.models import EncryptedString
 from model.models import CaesarEncryption
 from model.models import MonoalphabeticSubstitution
 from model.models import User
-from flask_sqlalchemy import SQLALchemy
+#from flask_sqlalchemy import SQLALchemy
 from sqlalchemy import SQLAlchemy
 from app import check_if_user_exists
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
