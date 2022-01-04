@@ -8,7 +8,7 @@ from modelsFlask import db
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///webdata.db"
 db.init_app(app)
 
 with app.app_context():
@@ -17,31 +17,32 @@ with app.app_context():
 logger = logging.getLogger(__name__)
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET'])
 def index():
-    if request.method == 'POST':
-        user_name = request.form.get("user")
-        try:
-            # TODO: check if user exists
-            user = db.session.query(User).filter_by(name=user_name).first()
-            print(user)
-            return user
-        except NoResultFound:
-            user = User(user_name)
-            db.session.add(user)
-            db.session.commit()
     return render_template("index.html")
 
 
 @app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
     user_name = request.form.get("user")
-    user_curr = User(user_name)
-    db.session.add(user_curr)
-    return render_template(
-        "encryption.html",
-        user=user_name
-    )
+    try:
+        check_if_user_exists(user_name)
+        user = db.session.query(User).filter_by(name=user_name).first()
+        logger.info(f"Login for user {user_name} successful")
+        return user
+    except NoResultFound:
+        logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
+        user = User(user_name)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    finally:
+        return render_template("encryption.html", user=user_name)
+
+
+def check_if_user_exists(user_name: str):
+    return db.session.query(User).filter_by(name=user_name).one()
+
 
 
 @app.route("/result", methods=['POST'])

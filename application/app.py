@@ -27,11 +27,10 @@ def get_user():
         user = session.query(User).filter_by(name=user_name).first()
         return user
     except NoResultFound:
-        logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
         user = User(user_name)
         session.add(user)
         session.commit()
-        logger.info(f"User with name {user.name} created")
+        logger.info(f"User with name {user_name} did not exist yet, created user on the fly")
         return user
     except MultipleResultsFound:
         logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
