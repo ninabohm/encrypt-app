@@ -1,10 +1,9 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 import logging
 
-from webapp import app
+from application.webapp import app
 
 logger = logging.getLogger(__name__)
 
