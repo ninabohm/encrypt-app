@@ -3,6 +3,9 @@ import logging
 from flask import Flask, request, render_template
 from sqlalchemy.orm.exc import NoResultFound
 from modelsFlask import User
+from modelsFlask import MonoalphabeticSubstitution
+from modelsFlask import CaesarEncryption
+from modelsFlask import EncryptedString
 from modelsFlask import db
 
 
@@ -44,7 +47,6 @@ def check_if_user_exists(user_name: str):
     return db.session.query(User).filter_by(name=user_name).one()
 
 
-
 @app.route("/result", methods=['POST'])
 def result():
     encryption_base = request.form.get("encryption_base")
@@ -54,7 +56,8 @@ def result():
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()
-        ##shift = encryption.get_shift_value()
+        db.session.add(encryption)
+        #shift = encryption.get_shift_value()
         shift = request.form.get["shift"]
         if shift == "":
             shift_value = random.randint(0, 1024)
@@ -70,10 +73,17 @@ def result():
                 return shift_value
     else:
         encryption = MonoalphabeticSubstitution()
+        db.session.add(encryption)
         shift = 0
 
     encryption_content = encryption.encrypt_input(user_input, shift)
     encrypted_string = EncryptedString(encryption_content, encryption, user).content
+    try:
+        #db.session.add(encrypted_string)
+        db.session.commit()
+    except KeyError as error:
+        logger.info(f"error: {error}")
+
 
     return render_template(
         "result.html",

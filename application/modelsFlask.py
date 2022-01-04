@@ -29,9 +29,9 @@ class EncryptionBase(db.Model):
 
     __tablename__ = "encryption_base"
 
-    id = Column(Integer, primary_key=True)
-    type = Column(String)
-    shift = Column(Integer)
+    id = db.Column(Integer, primary_key=True)
+    type = db.Column(String)
+    shift = db.Column(Integer)
     #encrypted_strings = relationship("EncryptedString", back_populates="encryption_base")
 
     __mapper_args__ = {
@@ -138,9 +138,9 @@ class EncryptedString(db.Model):
 
     __tablename__ = "encrypted_string"
 
-    id = Column(Integer, primary_key=True)
-    content = Column(String)
-    encryption_type = Column(String)
+    id = db.Column(Integer, primary_key=True)
+    content = db.Column(String)
+    encryption_type = db.Column(String)
 
     #encryption_base_id = Column(ForeignKey("encryption_base.id"))
     #encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings", uselist=False)
