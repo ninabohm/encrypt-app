@@ -56,7 +56,7 @@ def keep_alive():
             session.commit()
             print(encrypted_string.content)
         except KeyError as error:
-            print(f"error: {error}")
+            logger.info(f"error: {error}")
 
 
 def check_if_encryption_type_exists(type:str):

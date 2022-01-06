@@ -56,41 +56,25 @@ def result():
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()
-        db.session.add(encryption)
-        #shift = encryption.get_shift_value()
-        shift = request.form.get["shift"]
-        if shift == "":
-            shift_value = random.randint(0, 1024)
-            logger.info(f"User chose shift of {shift_value} ")
-        else:
-            try:
-                shift_value = int(shift)
-                logger.info(f"User chose shift of {shift_value}")
-                return shift_value
-            except ValueError:
-                shift_value = int(shift_value)
-                logger.info(f"User chose shift of {shift_value}")
-                return shift_value
     else:
         encryption = MonoalphabeticSubstitution()
-        db.session.add(encryption)
         shift = 0
 
     encryption_content = encryption.encrypt_input(user_input, shift)
-    encrypted_string = EncryptedString(encryption_content, encryption, user).content
+    db.session.add(encryption)
     try:
-        #db.session.add(encrypted_string)
+        encrypted_string = EncryptedString(encryption_content, encryption, user)
+        db.session.add(encrypted_string)
         db.session.commit()
     except KeyError as error:
         logger.info(f"error: {error}")
-
 
     return render_template(
         "result.html",
         encryption_base=encryption_base,
         shift=shift,
         user_input=user_input,
-        encrypted_string=encrypted_string
+        encrypted_string=encrypted_string.content
     )
 
 
