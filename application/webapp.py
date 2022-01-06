@@ -54,7 +54,10 @@ def check_if_user_exists(user_name: str):
 def result():
     encryption_base = request.form.get("encryption_base")
     user_input = request.form.get("user_input")
-    shift = int(request.form.get("shift"))
+    try:
+        shift = int(request.form.get("shift"))
+    except ValueError:
+        shift = random.randint(0, 1024)
     user_name = request.form.get("user")
     user = get_user(user_name)
 

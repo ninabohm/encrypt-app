@@ -59,7 +59,7 @@ def keep_alive():
             logger.info(f"error: {error}")
 
 
-def check_if_encryption_type_exists(type:str):
+def check_if_encryption_type_exists(type: str):
     return session.query(EncryptionBase).filter_by(type=type)
 
 
