@@ -19,7 +19,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
 
-    #encrypted_strings = relationship("EncryptedString", back_populates="user")
+    encrypted_strings = db.relationship("EncryptedString", back_populates="user")
 
     def __init__(self, name: str):
         self.name = name
@@ -32,7 +32,7 @@ class EncryptionBase(db.Model):
     id = db.Column(Integer, primary_key=True)
     type = db.Column(String)
     shift = db.Column(Integer)
-    #encrypted_strings = relationship("EncryptedString", back_populates="encryption_base")
+    encrypted_strings = db.relationship("EncryptedString", back_populates="encryption_base")
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -142,11 +142,11 @@ class EncryptedString(db.Model):
     content = db.Column(String)
     encryption_type = db.Column(String)
 
-    #encryption_base_id = Column(ForeignKey("encryption_base.id"))
-    #encryption_base = relationship("EncryptionBase", back_populates="encrypted_strings", uselist=False)
+    encryption_base_id = db.Column(ForeignKey("encryption_base.id"))
+    encryption_base = db.relationship("EncryptionBase", back_populates="encrypted_strings", uselist=False)
 
-    #user_id = Column(Integer, ForeignKey("user.id"))
-    #user = relationship("User", back_populates="encrypted_strings", uselist=False)
+    user_id = db.Column(Integer, ForeignKey("user.id"))
+    user = db.relationship("User", back_populates="encrypted_strings", uselist=False)
 
     def __init__(self, input_string: str, encryption, user):
         self.content_list = list(input_string)

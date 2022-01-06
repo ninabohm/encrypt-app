@@ -14,6 +14,10 @@
 <p>Hello {{user}}!</p>
 <form class="encryption-form" action="/result" method="POST">
     <div>
+        <input id="user" type="text" name="user" value="{{user}}">
+        <label class="label-1" for="user" hidden>User</label>
+    </div>
+    <div>
         <input id="caesar" type="radio" name="encryption_base" value="caesar" checked>
         <label class="label-1" for="caesar">Caesar Encryption</label>
     </div>
