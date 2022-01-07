@@ -11,7 +11,7 @@ from modelsFlask import db
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///webdata.db"
 db.init_app(app)
 
 with app.app_context():
