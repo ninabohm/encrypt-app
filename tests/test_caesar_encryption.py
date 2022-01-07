@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from application.models import CaesarEncryption
+from models import CaesarEncryption
 
 
 class TestCaesarEncryption(unittest.TestCase):

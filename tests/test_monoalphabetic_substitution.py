@@ -1,5 +1,5 @@
 import unittest
-from application.models import MonoalphabeticSubstitution
+from models import MonoalphabeticSubstitution
 
 
 class TestMonoalphabeticSubstitution(unittest.TestCase):

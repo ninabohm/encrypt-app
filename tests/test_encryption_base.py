@@ -1,5 +1,5 @@
 import unittest
-from application.models import EncryptionBase
+from models import EncryptionBase
 from unittest.mock import patch
 
 
