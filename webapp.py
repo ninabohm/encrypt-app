@@ -27,9 +27,9 @@ def index():
 
 @app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
-    user_name = request.form.get("user")
+    user_name = request.form.get("user_name")
     get_user(user_name)
-    return render_template("encryption.html", user=user_name)
+    return render_template("encryption.html", user_name=user_name)
 
 
 def get_user(user_name: str):
@@ -58,7 +58,7 @@ def result():
         shift = int(request.form.get("shift"))
     except ValueError:
         shift = random.randint(0, 1024)
-    user_name = request.form.get("user")
+    user_name = request.form.get("user_name")
     user = get_user(user_name)
 
     if encryption_base == "caesar":
