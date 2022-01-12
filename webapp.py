@@ -1,5 +1,7 @@
 import random
 import logging
+import sqlite3
+
 from flask import Flask, request, render_template
 from sqlalchemy.orm.exc import NoResultFound
 from modelsFlask import User
