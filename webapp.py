@@ -1,15 +1,15 @@
 import random
 import logging
-import sqlite3
 
 from flask import Flask, request, render_template
 from sqlalchemy.orm.exc import NoResultFound
-from modelsFlask import User
-from modelsFlask import MonoalphabeticSubstitution
-from modelsFlask import CaesarEncryption
-from modelsFlask import EncryptedString
-from modelsFlask import db
+from models import User
+from models import MonoalphabeticSubstitution
+from models import CaesarEncryption
+from models import EncryptedString
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
