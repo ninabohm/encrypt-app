@@ -91,20 +91,25 @@ class CaesarEncryption(EncryptionBase):
         encrypted_string = "".join(encrypted_string)
         return encrypted_string
 
-    def get_shift_value(self):
-        shift_value = input("Please insert the offset/vector (Press Enter for a random value): ")
-        if shift_value == "":
+    def set_shift_value(self, shift_input):
+        # shift_value = input("Please insert the offset/vector (Press Enter for a random value): ")
+        if shift_input == "":
             shift_value = random.randint(0, 1024)
             logger.info(f"User chose shift of {shift_value} ")
         else:
             try:
-                shift_value = int(shift_value)
+                shift_value = int(shift_input)
                 logger.info(f"User chose shift of {shift_value}")
                 return shift_value
             except ValueError:
-                shift_value = int(shift_value)
+                shift_value = int(shift_input)
                 logger.info(f"User chose shift of {shift_value}")
                 return shift_value
+
+
+    def get_shift_from_cli(self):
+        shift_input = input("Please insert the offset/vector (Press Enter for a random value): ")
+        return self.set_shift_value(shift_input)
 
 
 class MonoalphabeticSubstitution(EncryptionBase):

@@ -46,7 +46,7 @@ def keep_alive():
     while True:
         encryption = menu.define_encryption_type_or_exit()
         user_input = encryption.get_user_input_from_cli()
-        user_shift = encryption.get_shift_value()
+        user_shift = encryption.get_shift_from_cli()
         encryption_content = encryption.encrypt_input(user_input, user_shift)
         session.add(encryption)
         try:
