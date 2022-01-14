@@ -92,11 +92,11 @@ class CaesarEncryption(EncryptionBase):
         return encrypted_string
 
     def set_shift_value(self, shift_input):
-        # logger.info(f"User chose shift of {shift_value}")
         try:
             shift_value = int(shift_input)
         except ValueError:
             shift_value = random.randint(0, 1024)
+        logger.info(f"User chose shift of {shift_value}")
         return shift_value
 
     def get_shift_from_cli(self):
@@ -127,7 +127,7 @@ class MonoalphabeticSubstitution(EncryptionBase):
         encrypted_string = "".join(encrypted_string)
         return encrypted_string
 
-    def get_shift_value(self):
+    def get_shift_from_cli(self):
         return 0
 
 

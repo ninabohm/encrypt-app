@@ -27,6 +27,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/login", methods=['GET'])
+def login():
+    return render_template("login.html")
+
+
 @app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
     user_name = request.form.get("user_name")
@@ -38,14 +43,13 @@ def get_user(user_name: str):
     try:
         check_if_user_exists(user_name)
         user = db.session.query(User).filter_by(name=user_name).first()
-        app.logger.info(f"Login for user {user_name} successful")
-        return user
     except NoResultFound:
+        print("throwing exception!")
         app.logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
         user = User(user_name)
         db.session.add(user)
         db.session.commit()
-        return user
+    return user
 
 
 def check_if_user_exists(user_name: str):
