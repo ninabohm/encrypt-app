@@ -22,7 +22,6 @@ def get_user():
     logging.info("Application up and running")
     user_name = input("Please login with your first name. You'll be registered automatically if you have no account yet.: ")
     try:
-        # check_if_user_exists(user_name)
         logger.info(f"Login for user {user_name} successful")
         user = session.query(User).filter_by(name=user_name).first()
         return user

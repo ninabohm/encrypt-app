@@ -8,6 +8,8 @@ from models import MonoalphabeticSubstitution
 from models import CaesarEncryption
 from models import EncryptedString
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
+from flask import session
 
 db = SQLAlchemy()
 
@@ -15,6 +17,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = "Ph:3KN*T7eW=mBJ(2>D/FY!"
 app.logger.setLevel(logging.INFO)
 db.init_app(app)
 
@@ -27,8 +30,10 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login", methods=['GET'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        session["user_name"] = request.form["user_name"]
     return render_template("login.html")
 
 

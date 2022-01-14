@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webapp import app
 from webapp import check_if_user_exists
+from webapp import get_user
 from sqlalchemy.orm.exc import NoResultFound
 from models import User
 
@@ -20,7 +21,6 @@ class TestWebapp(unittest.TestCase):
         options.add_argument("headless")
         self.driver = webdriver.Chrome(service=ser, options=options)
         self.driver.get("http://localhost:5000")
-
 
     def tearDown(self):
         self.driver.quit()
@@ -42,11 +42,31 @@ class TestWebapp(unittest.TestCase):
             response = client.get("/login")
             assert response._status_code == 200
 
-    def test_given_user_exists_return_user_as_obj(self):
+    def test_given_user_does_not_exists_throw_NoResultFound(self):
         # requirement: no user with use_name = "xyz" in data.db
         with app.app_context():
             with self.assertRaises(NoResultFound):
                 check_if_user_exists("xyz")
 
+    def test_given_user_does_not_exists_return_type_user_obj(self):
+        # requirement: no user with use_name = "blablabla" in data.db
+        with app.app_context():
+            assert isinstance(get_user("blablabla"), User)
 
+    def test_given_user_does_exists_return_type_user_obj(self):
+        # requirement: user with use_name = "yesyesyes" in data.db
+        with app.app_context():
+            assert isinstance(get_user("yesyesyes"), User)
 
+    # def test_given_user_not_logged_in_when_get_encryption_return_403(self):
+    #     with app.test_client() as client:
+    #         response = client.get("/encryption")
+    #         assert response._status_code == 403
+
+    def test_given_user_not_logged_in_when_post_login_then_start_session(self):
+        with app.test_client() as client:
+            with client.session_transaction() as session:
+                session['somekey'] = "somevalue"
+
+            response = client.get("/login")
+            assert response._status_code == 200
