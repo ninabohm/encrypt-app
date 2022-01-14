@@ -15,12 +15,11 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.logger.setLevel(logging.INFO)
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
-logger = logging.getLogger(__name__)
 
 
 @app.route("/", methods=['GET'])
@@ -39,10 +38,10 @@ def get_user(user_name: str):
     try:
         check_if_user_exists(user_name)
         user = db.session.query(User).filter_by(name=user_name).first()
-        logger.info(f"Login for user {user_name} successful")
+        app.logger.info(f"Login for user {user_name} successful")
         return user
     except NoResultFound:
-        logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
+        app.logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
         user = User(user_name)
         db.session.add(user)
         db.session.commit()
@@ -77,7 +76,7 @@ def result():
         db.session.add(encrypted_string)
         db.session.commit()
     except KeyError as error:
-        logger.info(f"error: {error}")
+        app.logger.info(f"error: {error}")
 
     return render_template(
         "result.html",
