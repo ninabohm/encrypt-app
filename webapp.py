@@ -1,7 +1,7 @@
 import random
 import logging
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from sqlalchemy.orm.exc import NoResultFound
 from models import User
 from models import MonoalphabeticSubstitution
@@ -33,28 +33,44 @@ def index():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        user_name = request.form["user_name"]
+        try:
+            check_if_user_exists(user_name)
+        except NoResultFound as error:
+            return render_template("login.html", error=error)
         session["user_name"] = request.form["user_name"]
+        app.logger.info(f"session {session} started")
+        return redirect("/encryption")
     return render_template("login.html")
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        user_name = request.form.get("user_name")
+        user = User(user_name)
+        db.session.add(user)
+        app.logger.info(f"User with user_name {user_name} created")
+        db.session.commit()
+        return redirect("/login")
+    return render_template("register.html")
 
 
 @app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
-    user_name = request.form.get("user_name")
-    get_user(user_name)
-    return render_template("encryption.html", user_name=user_name)
+    if "user_name" in session:
+        user_name = session["user_name"]
+        return render_template("encryption.html", user_name=user_name)
+    return redirect("/login")
 
 
-def get_user(user_name: str):
+def set_user(user_name: str):
     try:
         check_if_user_exists(user_name)
         user = db.session.query(User).filter_by(name=user_name).first()
+        return user
     except NoResultFound:
-        print("throwing exception!")
-        app.logger.info(f"User with name {user_name} does not exist yet, creating user on the fly")
-        user = User(user_name)
-        db.session.add(user)
-        db.session.commit()
-    return user
+        app.logger.info(f"User with name {user_name} does not exist")
 
 
 def check_if_user_exists(user_name: str):
@@ -70,7 +86,7 @@ def result():
     except ValueError:
         shift = random.randint(0, 1024)
     user_name = request.form.get("user_name")
-    user = get_user(user_name)
+    user = set_user(user_name)
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()

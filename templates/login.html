@@ -11,15 +11,24 @@
 </head>
 <body>
 <h1>Login</h1>
-<form class="login-form" action="/encryption" method="POST">
+    <p>{{error}}</p>
+    <form class="login-form" action="/login" method="POST">
+        <div>
+            <label class="label-1" for="user_name">Username</label>
+            <input id="user_name" name="user_name" type="text" class="form-control" required autofocus><br>
+        </div>
+        <br>
+        <div>
+            <label class="label-1" for="password">Password</label>
+            <input id="password" name="password" type="password" class="form-control" required><br>
+        </div>
+        <br>
+        <div>
+            <button class="btn-primary" type="submit">Login</button>
+        </div>
+    </form>
     <div>
-        <label class="label-1" for="user_name">Username</label>
-        <input id="user_name" name="user_name" type="text" class="form-control" required autofocus><br>
+        <p>No account yet? Register <a href="/register">here</a></p>
     </div>
-    <br>
-    <div>
-        <button class="btn-primary" type="submit">Login</button>
-    </div>
-</form>
 </body>
 </html>
