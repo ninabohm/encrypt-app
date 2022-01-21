@@ -30,10 +30,19 @@ with app.app_context():
 def requires_login(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
-        if "user_name" in session:
+        if "logged_in" in session:
             return func(*args, **kwargs)
-        return "forbidden"
+        else:
+            return redirect("/login")
+
     return wrapped_func
+
+
+@app.route("/test")
+def test():
+    if "user_name" in session:
+        return "test"
+    return redirect("/login")
 
 
 @app.route("/", methods=['GET'])
@@ -95,8 +104,10 @@ def check_if_username_and_password_match(user_name: str, password: str):
 
 @app.route("/logout")
 def logout():
-    logout_user()
-    return redirect("/")
+    if "user_name" in session:
+        logout_user()
+        return redirect("/")
+    return redirect("/login")
 
 
 def logout_user():
@@ -114,37 +125,51 @@ def encryption():
         return redirect("/login")
 
 
-@app.route("/result", methods=['POST'])
+@requires_login
+@app.route("/result", methods=['GET', 'POST'])
 def result():
-    encryption_base = request.form.get("encryption_base")
-    user_input = request.form.get("user_input")
-    try:
-        shift = int(request.form.get("shift"))
-    except ValueError:
-        shift = random.randint(0, 1024)
+    if "user_name" in session:
+        encryption_base = request.form.get("encryption_base")
+        user_input = request.form.get("user_input")
+        try:
+            shift = int(request.form.get("shift"))
+        except ValueError:
+            shift = random.randint(0, 1024)
+        except TypeError:
+            return redirect("/encryption")
 
-    if encryption_base == "caesar":
-        encryption = CaesarEncryption()
+        if encryption_base == "caesar":
+            encryption = CaesarEncryption()
+        else:
+            encryption = MonoalphabeticSubstitution()
+            shift = 0
+
+        encryption_content = encryption.encrypt_input(user_input, shift)
+        db.session.add(encryption)
+        try:
+            user = set_user(session["user_name"])
+            encrypted_string = EncryptedString(encryption_content, encryption, user)
+            db.session.add(encrypted_string)
+            db.session.commit()
+            app.logger.info(f"Added encrypted string {encrypted_string.content} with {encryption.type} encryption for user {user.name}")
+        except KeyError as error:
+            app.logger.info(f"error: {error}")
+
+        return render_template(
+            "result.html",
+            encryption_base=encryption_base,
+            shift=shift,
+            user_input=user_input,
+            encrypted_string=encrypted_string.content
+        )
     else:
-        encryption = MonoalphabeticSubstitution()
-        shift = 0
+        return redirect("/login")
 
-    encryption_content = encryption.encrypt_input(user_input, shift)
-    db.session.add(encryption)
-    try:
-        encrypted_string = EncryptedString(encryption_content, encryption, user)
-        db.session.add(encrypted_string)
-        db.session.commit()
-    except KeyError as error:
-        app.logger.info(f"error: {error}")
 
-    return render_template(
-        "result.html",
-        encryption_base=encryption_base,
-        shift=shift,
-        user_input=user_input,
-        encrypted_string=encrypted_string.content
-    )
+@app.route("/users")
+def users():
+    all_users = db.session.query(User).all()
+    return render_template("users.html", all_users=all_users)
 
 
 if __name__ == '__main__':
