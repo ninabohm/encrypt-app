@@ -7,36 +7,41 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.exc import IntegrityError
 
 
 logging.basicConfig(stream=sys.stdout,
-    encoding="utf-8",
-    level=logging.DEBUG,
-    format="%(asctime)s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S")
+                    encoding="utf-8",
+                    level=logging.DEBUG,
+                    format="%(asctime)s %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S")
 
 logger = logging.getLogger(__name__)
 
 
 def set_user():
-    logging.info("Application up and running")
-    user_name = input("Please login with your first name. You'll be registered automatically if you have no account yet.: ")
-    password = input("Please choose a password: ")
+    user_name = input("First name: ")
+    password = input("Password: ")
     try:
-        check_if_user_exists(user_name)
+        user = check_if_username_and_password_match(user_name, password)
     except NoResultFound:
-        user = User(user_name, password)
-        session.add(user)
-        session.commit()
-        logger.info(f"User with name {user_name} did not exist yet, created user on the fly")
+        try:
+            user = User(user_name, password)
+            session.add(user)
+            session.commit()
+            logger.info(f"User with name {user_name} did not exist yet, created user on the fly")
+        except IntegrityError:
+            session.rollback()
+            logger.info(f"User {user_name} already exists. Please try again.")
+            set_user()
     except MultipleResultsFound:
         user = session.query(User).filter_by(name=user_name).first()
         logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
     return user
 
 
-def check_if_user_exists(user_name: str):
-    return session.query(User).filter_by(name=user_name).one()
+def check_if_username_and_password_match(user_name: str, password: str):
+    return session.query(User).filter_by(name=user_name, password=password).one()
 
 
 def keep_alive():
@@ -80,4 +85,4 @@ if __name__ == "__main__":
 
 
 
-    
+

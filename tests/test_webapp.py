@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from webapp import app
 from webapp import check_if_user_exists
 from webapp import check_if_username_and_password_match
-from webapp import requires_login
+# from webapp import requires_login
 from webapp import set_user
 from sqlalchemy.orm.exc import NoResultFound
 from models import User
@@ -69,11 +69,11 @@ class TestWebapp(unittest.TestCase):
             with self.assertRaises(NoResultFound):
                 check_if_username_and_password_match("n", "nbf")
 
-    @requires_login
-    def mock_func(x):
-        return x
+    # @requires_login
+    # def mock_func(x):
+    #     return x
 
-    def test_sample_wrapper(self):
-        self.assertEqual(self.mock_func.__wrapped__(1), 1)
+    # def test_sample_wrapper(self):
+    #     self.assertEqual(self.mock_func.__wrapped__(1), 1)
 
 

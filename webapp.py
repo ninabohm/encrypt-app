@@ -21,21 +21,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "Ph:3KN*T7eW=mBJ(2>D/FY!"
 app.logger.setLevel(logging.INFO)
+logger = app.logger.info
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
 
-def requires_login(func):
-    @wraps(func)
-    def wrapped_func(*args, **kwargs):
-        if "logged_in" in session:
-            return func(*args, **kwargs)
-        else:
-            return redirect("/login")
-
-    return wrapped_func
+# def requires_login(func):
+#     @wraps(func)
+#     def wrapped_func(*args, **kwargs):
+#         if "logged_in" in session:
+#             return func(*args, **kwargs)
+#         else:
+#             return redirect("/login")
+#
+#     return wrapped_func
 
 
 @app.route("/test")
@@ -58,11 +59,11 @@ def register():
         try:
             user = User(user_name, password)
             db.session.add(user)
-            app.logger.info(f"User with user_name {user_name} created")
+            logger(f"User with user_name {user_name} created")
             db.session.commit()
             return redirect("/login")
         except IntegrityError as error:
-            app.logger.info(f"user {user_name} already exists")
+            logger(f"user {user_name} already exists")
             return render_template("register.html", error=error)
     return render_template("register.html")
 
@@ -78,18 +79,16 @@ def login():
         except NoResultFound as error:
             return render_template("login.html", error=error)
         session["user_name"] = request.form["user_name"]
-        app.logger.info(f"session {session} started")
+        logger(f"session {session} started")
         return redirect("/encryption")
     return render_template("login.html")
 
 
 def set_user(user_name: str):
     try:
-        check_if_user_exists(user_name)
-        user = db.session.query(User).filter_by(name=user_name).first()
-        return user
+        return check_if_user_exists(user_name)
     except NoResultFound:
-        app.logger.info(f"User with name {user_name} does not exist")
+        logger(f"User with name {user_name} does not exist")
 
 
 def check_if_user_exists(user_name: str):
@@ -97,9 +96,7 @@ def check_if_user_exists(user_name: str):
 
 
 def check_if_username_and_password_match(user_name: str, password: str):
-    matching = db.session.query(User).filter_by(name=user_name, password=password).one()
-    app.logger.info(matching)
-    return matching
+    return db.session.query(User).filter_by(name=user_name, password=password).one()
 
 
 @app.route("/logout")
@@ -111,21 +108,19 @@ def logout():
 
 
 def logout_user():
-    app.logger.info(f"ending session {session}")
+    logger(f"ending session {session}")
     session.pop("user_name")
 
 
-@requires_login
 @app.route("/encryption", methods=['GET', 'POST'])
 def encryption():
     try:
         return render_template("encryption.html", user_name=session["user_name"])
     except KeyError as error:
-        app.logger.info(error)
+        logger(error)
         return redirect("/login")
 
 
-@requires_login
 @app.route("/result", methods=['GET', 'POST'])
 def result():
     if "user_name" in session:
@@ -151,9 +146,9 @@ def result():
             encrypted_string = EncryptedString(encryption_content, encryption, user)
             db.session.add(encrypted_string)
             db.session.commit()
-            app.logger.info(f"Added encrypted string {encrypted_string.content} with {encryption.type} encryption for user {user.name}")
+            logger(f"Added encrypted string {encrypted_string.content} with {encryption.type} encryption for user {user.name}")
         except KeyError as error:
-            app.logger.info(f"error: {error}")
+            logger(f"error: {error}")
 
         return render_template(
             "result.html",
@@ -168,8 +163,10 @@ def result():
 
 @app.route("/users")
 def users():
-    all_users = db.session.query(User).all()
-    return render_template("users.html", all_users=all_users)
+    if "user_name" in session:
+        all_users = db.session.query(User).all()
+        return render_template("users.html", all_users=all_users)
+    return redirect("/login")
 
 
 if __name__ == '__main__':
