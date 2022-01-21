@@ -18,11 +18,13 @@ class User(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
 
     encrypted_strings = relationship("EncryptedString", back_populates="user")
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, password: str):
         self.name = name
+        self.password = password
 
 
 class EncryptionBase(SqlAlchemyBase):

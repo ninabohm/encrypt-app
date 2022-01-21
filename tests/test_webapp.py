@@ -3,9 +3,10 @@ import logging
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 from webapp import app
 from webapp import check_if_user_exists
+from webapp import check_if_username_and_password_match
+from webapp import requires_login
 from webapp import set_user
 from sqlalchemy.orm.exc import NoResultFound
 from models import User
@@ -50,20 +51,10 @@ class TestWebapp(unittest.TestCase):
             with self.assertRaises(NoResultFound):
                 check_if_user_exists("xyz")
 
-    def test_given_user_does_not_exists_return_type_user_obj(self):
-        # requirement: no user with use_name = "blablabla" in data.db
-        with app.app_context():
-            assert isinstance(set_user("blablabla"), User)
-
     def test_given_user_does_exists_return_type_user_obj(self):
         # requirement: user with use_name = "yesyesyes" in data.db
         with app.app_context():
             assert isinstance(set_user("yesyesyes"), User)
-
-    # def test_given_user_not_logged_in_when_get_encryption_return_403(self):
-    #     with app.test_client() as client:
-    #         response = client.get("/encryption")
-    #         assert response._status_code == 403
 
     def test_given_user_not_logged_in_when_post_login_then_start_session(self):
         with app.test_client() as client:
@@ -73,9 +64,16 @@ class TestWebapp(unittest.TestCase):
             response = client.get("/login")
             assert response._status_code == 200
 
-    # def test_given_user_exists_then_login_works(self):
-    #     username = app.config["someusername"]
-    #     password = app.config["somepassword"]
-    #     with app.test_client() as client:
-    #         rv = self.login(client, username, password)
-    #         assert "Successful login" in rv.data
+    def test_given_username_and_password_dont_match_then_throw_exception(self):
+        with app.app_context():
+            with self.assertRaises(NoResultFound):
+                check_if_username_and_password_match("n", "nbf")
+
+    @requires_login
+    def mock_func(x):
+        return x
+
+    def test_sample_wrapper(self):
+        self.assertEqual(self.mock_func.__wrapped__(1), 1)
+
+

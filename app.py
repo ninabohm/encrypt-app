@@ -18,23 +18,21 @@ logging.basicConfig(stream=sys.stdout,
 logger = logging.getLogger(__name__)
 
 
-def get_user():
+def set_user():
     logging.info("Application up and running")
     user_name = input("Please login with your first name. You'll be registered automatically if you have no account yet.: ")
+    password = input("Please choose a password: ")
     try:
-        logger.info(f"Login for user {user_name} successful")
-        user = session.query(User).filter_by(name=user_name).first()
-        return user
+        check_if_user_exists(user_name)
     except NoResultFound:
-        user = User(user_name)
+        user = User(user_name, password)
         session.add(user)
         session.commit()
         logger.info(f"User with name {user_name} did not exist yet, created user on the fly")
-        return user
     except MultipleResultsFound:
-        logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
         user = session.query(User).filter_by(name=user_name).first()
-        return user
+        logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
+    return user
 
 
 def check_if_user_exists(user_name: str):
@@ -69,7 +67,7 @@ if __name__ == "__main__":
     Session = sessionmaker(engine)
     session = Session()
 
-    user_curr = get_user()
+    user_curr = set_user()
     menu = Menu()
     keep_alive()
     session.commit()

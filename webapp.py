@@ -1,8 +1,10 @@
 import random
 import logging
+from functools import wraps
 
 from flask import Flask, request, render_template, redirect
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 from models import User
 from models import MonoalphabeticSubstitution
 from models import CaesarEncryption
@@ -25,43 +27,51 @@ with app.app_context():
     db.create_all()
 
 
+def requires_login(func):
+    @wraps(func)
+    def wrapped_func(*args, **kwargs):
+        if "user_name" in session:
+            return func(*args, **kwargs)
+        return "forbidden"
+    return wrapped_func
+
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template("index.html")
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        user_name = request.form["user_name"]
-        try:
-            check_if_user_exists(user_name)
-        except NoResultFound as error:
-            return render_template("login.html", error=error)
-        session["user_name"] = request.form["user_name"]
-        app.logger.info(f"session {session} started")
-        return redirect("/encryption")
-    return render_template("login.html")
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
         user_name = request.form.get("user_name")
-        user = User(user_name)
-        db.session.add(user)
-        app.logger.info(f"User with user_name {user_name} created")
-        db.session.commit()
-        return redirect("/login")
+        password = request.form.get("password")
+        try:
+            user = User(user_name, password)
+            db.session.add(user)
+            app.logger.info(f"User with user_name {user_name} created")
+            db.session.commit()
+            return redirect("/login")
+        except IntegrityError as error:
+            app.logger.info(f"user {user_name} already exists")
+            return render_template("register.html", error=error)
     return render_template("register.html")
 
 
-@app.route("/encryption", methods=['GET', 'POST'])
-def encryption():
-    if "user_name" in session:
-        user_name = session["user_name"]
-        return render_template("encryption.html", user_name=user_name)
-    return redirect("/login")
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user_name = request.form["user_name"]
+        password = request.form["password"]
+        try:
+            check_if_user_exists(user_name)
+            check_if_username_and_password_match(user_name, password)
+        except NoResultFound as error:
+            return render_template("login.html", error=error)
+        session["user_name"] = request.form["user_name"]
+        app.logger.info(f"session {session} started")
+        return redirect("/encryption")
+    return render_template("login.html")
 
 
 def set_user(user_name: str):
@@ -77,6 +87,33 @@ def check_if_user_exists(user_name: str):
     return db.session.query(User).filter_by(name=user_name).one()
 
 
+def check_if_username_and_password_match(user_name: str, password: str):
+    matching = db.session.query(User).filter_by(name=user_name, password=password).one()
+    app.logger.info(matching)
+    return matching
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+def logout_user():
+    app.logger.info(f"ending session {session}")
+    session.pop("user_name")
+
+
+@requires_login
+@app.route("/encryption", methods=['GET', 'POST'])
+def encryption():
+    try:
+        return render_template("encryption.html", user_name=session["user_name"])
+    except KeyError as error:
+        app.logger.info(error)
+        return redirect("/login")
+
+
 @app.route("/result", methods=['POST'])
 def result():
     encryption_base = request.form.get("encryption_base")
@@ -85,8 +122,6 @@ def result():
         shift = int(request.form.get("shift"))
     except ValueError:
         shift = random.randint(0, 1024)
-    user_name = request.form.get("user_name")
-    user = set_user(user_name)
 
     if encryption_base == "caesar":
         encryption = CaesarEncryption()
