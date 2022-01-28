@@ -27,12 +27,21 @@ with app.app_context():
     db.create_all()
 
 
-def requires_login(func):
+def requires_logged_in(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
         if "user_name" in session:
             return func(*args, **kwargs)
         return render_template("login.html")
+    return wrapped_func
+
+
+def requires_not_logged_in(func):
+    @wraps(func)
+    def wrapped_func(*args, **kwargs):
+        if "user_name" not in session:
+            return func(*args, **kwargs)
+        return redirect("/encryption")
     return wrapped_func
 
 
@@ -59,6 +68,7 @@ def register():
 
 
 @app.route("/login", methods=['GET', 'POST'])
+@requires_not_logged_in
 def login():
     if request.method == 'POST':
         user_name = request.form["user_name"]
@@ -90,7 +100,7 @@ def check_if_username_and_password_match(user_name: str, password: str):
 
 
 @app.route("/logout")
-@requires_login
+@requires_logged_in
 def logout():
     if "user_name" in session:
         logout_user()
@@ -104,13 +114,13 @@ def logout_user():
 
 
 @app.route("/encryption", methods=['GET', 'POST'])
-@requires_login
+@requires_logged_in
 def encryption():
     return render_template("encryption.html", user_name=session["user_name"])
 
 
 @app.route("/result", methods=['GET', 'POST'])
-@requires_login
+@requires_logged_in
 def result():
     encryption_base = request.form.get("encryption_base")
     user_input = request.form.get("user_input")
@@ -148,7 +158,7 @@ def result():
 
 
 @app.route("/users")
-@requires_login
+@requires_logged_in
 def users():
     if "user_name" in session:
         all_users = db.session.query(User).all()
