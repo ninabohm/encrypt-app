@@ -102,9 +102,7 @@ def check_if_username_and_password_match(user_name: str, password: str):
 @app.route("/logout")
 @requires_logged_in
 def logout():
-    if "user_name" in session:
-        logout_user()
-        return redirect("/")
+    logout_user()
     return redirect("/login")
 
 
