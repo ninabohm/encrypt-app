@@ -11,6 +11,7 @@ from models import CaesarEncryption
 from models import EncryptedString
 from flask_sqlalchemy import SQLAlchemy
 from flask import session
+import matplotlib.pyplot as plt
 
 db = SQLAlchemy()
 
@@ -158,10 +159,22 @@ def result():
 @app.route("/users")
 @requires_logged_in
 def users():
-    if "user_name" in session:
-        all_users = db.session.query(User).all()
-        return render_template("users.html", all_users=all_users)
-    return redirect("/login")
+    all_users = db.session.query(User).all()
+    return render_template("users.html", all_users=all_users)
+
+
+@app.route("/statistics")
+@requires_logged_in
+def statistics():
+    # all_encrypted_strings = db.session.query(EncryptedString).all()
+    all_encrypted_strings = ["hallo", "hallo", "kevin"]
+    bins = [0, 1, 2]
+    bar_graph = plt.bar(range(len(all_encrypted_strings)))
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.legend()
+    path = "static/images/encrypted_chars_distribution.png"
+    return render_template("statistics.html", img_path=path)
 
 
 if __name__ == '__main__':
