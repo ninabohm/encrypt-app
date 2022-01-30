@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import numpy as np
+from forms import RegisterForm, LoginForm, EncryptionForm
 
 db = SQLAlchemy()
 
@@ -35,9 +36,10 @@ with app.app_context():
 def requires_logged_in(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
+        form = LoginForm()
         if "user_name" in session:
             return func(*args, **kwargs)
-        return render_template("login.html")
+        return render_template("login.html", form=form)
     return wrapped_func
 
 
@@ -57,6 +59,7 @@ def index():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    form = RegisterForm()
     if request.method == "POST":
         user_name = request.form.get("user_name")
         password = request.form.get("password")
@@ -69,12 +72,13 @@ def register():
         except IntegrityError as error:
             logger(f"user {user_name} already exists")
             return render_template("register.html", error=error)
-    return render_template("register.html")
+    return render_template("register.html", form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 @requires_not_logged_in
 def login():
+    form = LoginForm()
     if request.method == 'POST':
         user_name = request.form["user_name"]
         password = request.form["password"]
@@ -82,11 +86,11 @@ def login():
             check_if_user_exists(user_name)
             check_if_username_and_password_match(user_name, password)
         except NoResultFound as error:
-            return render_template("login.html", error=error)
+            return render_template("login.html", error=error, form=form)
         session["user_name"] = request.form["user_name"]
         logger(f"session {session} started")
         return redirect("/encryption")
-    return render_template("login.html")
+    return render_template("login.html", form=form)
 
 
 def set_user(user_name: str):
@@ -119,7 +123,8 @@ def logout_user():
 @app.route("/encryption", methods=['GET', 'POST'])
 @requires_logged_in
 def encryption():
-    return render_template("encryption.html", user_name=session["user_name"])
+    form = EncryptionForm()
+    return render_template("encryption.html", user_name=session["user_name"], form=form)
 
 
 @app.route("/result", methods=['GET', 'POST'])
