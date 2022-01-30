@@ -5,6 +5,7 @@ from functools import wraps
 from flask import Flask, request, render_template, redirect
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 from models import User
 from models import MonoalphabeticSubstitution
 from models import CaesarEncryption
@@ -14,6 +15,7 @@ from flask import session
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+import numpy as np
 
 db = SQLAlchemy()
 
@@ -168,15 +170,26 @@ def users():
 @app.route("/statistics")
 @requires_logged_in
 def statistics():
-    encrypted_strings = db.session.query(EncryptedString.content).all()
-    plt.hist(encrypted_strings, bins=30, histtype="bar")
-    plt.xlabel('encrypted characters')
-    plt.ylabel('frequency')
-    plt.title("Frequency")
-    plt.legend()
-    path = "static/images/frequency.png"
-    plt.savefig(path)
-    return render_template("statistics.html", img_path=path)
+    encrypted_strings = db.session.query(EncryptedString).all()
+    strings_by_user = db.session.query(func.count(EncryptedString.id)).group_by(EncryptedString.user_id).all()
+    logger(strings_by_user)
+    x = np.arange(0, 6, 0.05)
+    y1 = np.sin(x)
+    y2 = np.cos(x)
+    figure, axis = (plt.subplots(1, 2))
+    axis[0].bar(x, y1)
+    axis[0].set_title("Character usage")
+    axis[1].bar(x, y2)
+    axis[1].set_title("User share")
+    frequency_path = "static/images/frequency.png"
+    plt.savefig(frequency_path)
+
+    # plt.xlabel('encrypted characters')
+    # plt.ylabel('frequency')
+    # plt.title("Frequency")
+    # plt.legend()
+
+    return render_template("statistics.html", frequency_path=frequency_path)
 
 
 if __name__ == '__main__':
