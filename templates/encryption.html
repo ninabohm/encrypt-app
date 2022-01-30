@@ -29,10 +29,13 @@
 <!--            <label class="label-1" for="user_input" hidden>Input</label>-->
 <!--            <input id="user_input" name="user_input" type="text" class="form-control" required autofocus value="abc" placeholder="Type your word to encrypt here"><br>-->
             {{ form.user_input.label }}
-            {{ form.user_input }}
+            <div>
+                {{ form.user_input }}
+            </div>
+
         </div>
         <div>
-            <button class="btn btn-primary" type="submit">Encrypt</button>
+            <button class="btn btn-primary mt-4" type="submit">Encrypt</button>
         </div>
     </form>
 {% endblock %}
