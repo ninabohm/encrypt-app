@@ -1,5 +1,5 @@
 from wtforms import Form, StringField, PasswordField, IntegerField
-from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms.validators import DataRequired, Length, NumberRange, Regexp
 
 
 class RegisterForm(Form):
@@ -14,5 +14,5 @@ class LoginForm(Form):
 
 class EncryptionForm(Form):
     shift = IntegerField("Shift (1-1024)", [NumberRange(min=1, max=1024, message="Invalid number")])
-    user_input = StringField("Your text to be encrypted", [DataRequired(), Length(max=50)])
+    user_input = StringField("Your text to be encrypted", validators=[DataRequired(), Length(max=50), Regexp('^[A-Za-z0-9 r!#$%&\'()*+,-.|\/:;<=>?@[\]^_`{|}~\"]+$')])
 

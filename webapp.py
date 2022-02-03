@@ -138,7 +138,7 @@ def result():
         shift = int(request.form.get("shift"))
     except ValueError:
         shift = random.randint(0, 1024)
-    except TypeError as error:
+    except TypeError:
         return redirect("/encryption")
 
     if encryption_base == "caesar":
