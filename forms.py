@@ -9,7 +9,7 @@ class RegisterForm(Form):
 
 class LoginForm(Form):
     user_name = StringField("Username", [DataRequired(), Length(max=20)])
-    password = PasswordField("Password", [DataRequired(), Length(min=6, max=30)])
+    password = PasswordField("Password", [DataRequired(), Length(max=30)])
 
 
 class EncryptionForm(Form):

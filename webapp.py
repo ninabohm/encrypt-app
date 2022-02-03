@@ -3,6 +3,7 @@ import logging
 from functools import wraps
 
 from flask import Flask, request, render_template, redirect
+from flask_bootstrap import Bootstrap
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
@@ -21,6 +22,7 @@ from forms import RegisterForm, LoginForm, EncryptionForm
 db = SQLAlchemy()
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -71,7 +73,7 @@ def register():
             return redirect("/login")
         except IntegrityError as error:
             logger(f"user {user_name} already exists")
-            return render_template("register.html", error=error)
+            return render_template("register.html", form=form, error=error)
     return render_template("register.html", form=form)
 
 
