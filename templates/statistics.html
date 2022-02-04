@@ -7,12 +7,12 @@
 {% block content %}
    <h1>Statistics</h1>
     <p>{{error}}</p>
-    <div>
-        <div class="col-xs-6 imgcont">
-            <img src="{{frequency_path}}">
-        </div>
-        <div class="col-xs-6 imgcont">
-            <img src="{{user_share_path}}">
-        </div>
-    </div>
+    <div id="chart" class="chart" style="text-align: center"></div>
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    const graphs = {{graph_json | safe }};
+    Plotly.plot("chart", graphs, {});
+</script>
 {% endblock %}

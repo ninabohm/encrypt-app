@@ -1,3 +1,4 @@
+import json
 import random
 import logging
 from functools import wraps
@@ -13,10 +14,8 @@ from models import CaesarEncryption
 from models import EncryptedString
 from flask_sqlalchemy import SQLAlchemy
 from flask import session
-import matplotlib
-matplotlib.use('Agg')
-from matplotlib import pyplot as plt
-import numpy as np
+import plotly
+import plotly.express as px
 from forms import RegisterForm, LoginForm, EncryptionForm
 
 db = SQLAlchemy()
@@ -177,26 +176,11 @@ def users():
 @app.route("/statistics")
 @requires_logged_in
 def statistics():
-    encrypted_strings = db.session.query(EncryptedString).all()
-    strings_by_user = db.session.query(func.count(EncryptedString.id)).group_by(EncryptedString.user_id).all()
-    logger(strings_by_user)
-    x = np.arange(0, 6, 0.05)
-    y1 = np.sin(x)
-    y2 = np.cos(x)
-    figure, axis = (plt.subplots(1, 2))
-    axis[0].bar(x, y1)
-    axis[0].set_title("Character usage")
-    axis[1].bar(x, y2)
-    axis[1].set_title("User share")
-    frequency_path = "static/images/frequency.png"
-    plt.savefig(frequency_path)
-
-    # plt.xlabel('encrypted characters')
-    # plt.ylabel('frequency')
-    # plt.title("Frequency")
-    # plt.legend()
-
-    return render_template("statistics.html", frequency_path=frequency_path)
+    # strings_by_user = db.session.query(func.count(EncryptedString.id)).group_by(EncryptedString.user_id).all()
+    data_frame = px.data.medals_long()
+    fig = px.pie(data_frame, values="count", names="country", title="User share")
+    graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("statistics.html", graph_json=graph_json)
 
 
 if __name__ == '__main__':
