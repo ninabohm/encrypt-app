@@ -16,6 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import session
 import plotly
 import plotly.express as px
+import pandas as pd
 from forms import RegisterForm, LoginForm, EncryptionForm
 
 db = SQLAlchemy()
@@ -176,12 +177,43 @@ def users():
 @app.route("/statistics")
 @requires_logged_in
 def statistics():
-    # strings_by_user = db.session.query(func.count(EncryptedString.id)).group_by(EncryptedString.user_id).all()
-    data_frame = px.data.medals_long()
-    fig = px.pie(data_frame, values="count", names="country", title="User share")
-    graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template("statistics.html", graph_json=graph_json)
+    graph_json_user = get_strings_by_user()
+    graph_json_chars = get_chars_count()
+    return render_template("statistics.html", graph_json_user=graph_json_user, graph_json_chars=graph_json_chars)
+
+
+def get_strings_by_user():
+    strings_by_user = db.session.query(User.name, func.count(EncryptedString.id)).join(User).group_by(EncryptedString.user_id).all()
+    strings_by_user_dict = {"Username": [], "Count": []}
+    for user_name, count in strings_by_user:
+        strings_by_user_dict.setdefault("Username").append(user_name)
+        strings_by_user_dict.setdefault("Count").append(count)
+
+    data_frame = pd.DataFrame.from_dict(strings_by_user_dict)
+    fig = px.pie(data_frame, values="Count", names="Username", title="User share")
+    graph_json_user = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graph_json_user
+
+
+def get_chars_count():
+    strings_all = db.session.query(EncryptedString.content).all()
+    first_tuple_elements = []
+    for a_tuple in strings_all:
+        first_tuple_elements.append(a_tuple[0])
+
+    for strings in first_tuple_elements:
+
+
+    single_string = first_tuple_elements[0]
+    chars_count = pd.Series(list(single_string), name="Count").value_counts()
+
+    data_frame = chars_count.to_frame().reset_index()
+    fig = px.bar(data_frame, x="index", y="Count", title="Chars usage frequency (15 most used)")
+    graph_json_chars = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graph_json_chars
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+    get_chars_count()
