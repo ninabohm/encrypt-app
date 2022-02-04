@@ -14,5 +14,5 @@ class LoginForm(Form):
 
 class EncryptionForm(Form):
     shift = IntegerField("Shift (1-1024)", [NumberRange(min=1, max=1024, message="Invalid number")])
-    user_input = StringField("Your text to be encrypted", validators=[DataRequired(), Length(max=50), Regexp('^[A-Za-z0-9 r!#$%&\'()*+,-.|\/:;<=>?@[\]^_`{|}~\"]+$')])
+    user_input = StringField("Enter text", validators=[DataRequired(), Length(max=50), Regexp('^[A-Za-z0-9 r!#$%&\'()*+,-.|\/:;<=>?@[\]^_`{|}~\"]+$')])
 
