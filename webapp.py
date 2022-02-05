@@ -201,14 +201,15 @@ def get_chars_count():
     for a_tuple in strings_all:
         first_tuple_elements.append(a_tuple[0])
 
-    for strings in first_tuple_elements:
+    all_stings_in_one = ""
+    for single_string in first_tuple_elements:
+        all_stings_in_one = all_stings_in_one + single_string
 
-
-    single_string = first_tuple_elements[0]
-    chars_count = pd.Series(list(single_string), name="Count").value_counts()
-
+    chars_count = pd.Series(list(all_stings_in_one), name="Count").value_counts().nlargest(n=15)
     data_frame = chars_count.to_frame().reset_index()
-    fig = px.bar(data_frame, x="index", y="Count", title="Chars usage frequency (15 most used)")
+    data_frame.rename(columns={"index": "Chars"}, inplace=True)
+    print(data_frame)
+    fig = px.bar(data_frame, x="Chars", y="Count", title="Chars usage frequency (15 most used)")
     graph_json_chars = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graph_json_chars
