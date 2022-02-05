@@ -71,9 +71,10 @@ def register():
             logger(f"User with user_name {user_name} created")
             db.session.commit()
             return redirect("/login")
-        except IntegrityError as error:
+        except IntegrityError:
             logger(f"user {user_name} already exists")
-            return render_template("register.html", form=form, error=error)
+            error_message = "Usename already taken. Please try a different name"
+            return render_template("register.html", form=form, error=error_message)
     return render_template("register.html", form=form)
 
 
@@ -87,8 +88,9 @@ def login():
         try:
             check_if_user_exists(user_name)
             check_if_username_and_password_match(user_name, password)
-        except NoResultFound as error:
-            return render_template("login.html", error=error, form=form)
+        except NoResultFound:
+            error_message = "Account name or password incorrect, please try again or register first"
+            return render_template("login.html", error=error_message, form=form)
         session["user_name"] = request.form["user_name"]
         logger(f"session {session} started")
         return redirect("/encryption")

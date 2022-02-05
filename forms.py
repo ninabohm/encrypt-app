@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length, NumberRange, Regexp
 
 class RegisterForm(Form):
     user_name = StringField("Username", [DataRequired(), Length(max=20)])
-    password = PasswordField("Password (min. 6)", [DataRequired(), Length(min=6, max=30)])
+    password = PasswordField("Password", [DataRequired(), Length(min=6, max=30)])
 
 
 class LoginForm(Form):
