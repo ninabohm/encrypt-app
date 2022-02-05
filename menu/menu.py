@@ -32,17 +32,15 @@ class Menu:
             encryption = CaesarEncryption()
             session.commit()
             return encryption
-
-        if self.option == "2":
+        elif self.option == "2":
             encryption = MonoalphabeticSubstitution()
             session.commit()
             return encryption
-
-        if self.option == "3":
+        elif self.option == "3":
             print("Learn more about the app on https://gitlab.rz.htw-berlin.de/schroedr/vl2022_ina/")
-
-        if self.option == "4":
             exit()
-
-
+        elif self.option == "4":
+            exit()
+        else:
+            raise ValueError("Wrong menu value entered")
 

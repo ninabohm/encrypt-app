@@ -46,11 +46,17 @@ def check_if_username_and_password_match(user_name: str, password: str):
 
 def keep_alive():
     while True:
-        encryption = menu.define_encryption_type_or_exit()
+        try:
+            encryption = menu.define_encryption_type_or_exit()
+        except ValueError as error:
+            logger.info(error)
+            print("We don't have a menu option for this number, please try again")
+            exit()
         user_input = encryption.get_user_input_from_cli()
         user_shift = encryption.get_shift_from_cli()
         encryption_content = encryption.encrypt_input(user_input, user_shift)
         session.add(encryption)
+
         try:
             encrypted_string = EncryptedString(encryption_content, encryption, user_curr)
             encryption.encrypted_strings.append(encrypted_string)
