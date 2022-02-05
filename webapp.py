@@ -191,6 +191,7 @@ def get_strings_by_user():
 
     data_frame = pd.DataFrame.from_dict(strings_by_user_dict)
     fig = px.pie(data_frame, values="Count", names="Username", title="User share")
+    fig.update_layout(title={"x": 0.5})
     graph_json_user = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graph_json_user
 
@@ -208,8 +209,8 @@ def get_chars_count():
     chars_count = pd.Series(list(all_stings_in_one), name="Count").value_counts().nlargest(n=15)
     data_frame = chars_count.to_frame().reset_index()
     data_frame.rename(columns={"index": "Chars"}, inplace=True)
-    print(data_frame)
-    fig = px.bar(data_frame, x="Chars", y="Count", title="Chars usage frequency (15 most used)")
+    fig = px.bar(data_frame, x="Chars", y="Count", title="Character usage frequency (15 most used)")
+    fig.update_layout(title={"x": 0.5})
     graph_json_chars = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graph_json_chars
@@ -217,4 +218,3 @@ def get_chars_count():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    get_chars_count()
