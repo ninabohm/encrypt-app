@@ -1,8 +1,8 @@
-import logging, sys
+import logging
+import sys
 from menu.menu import Menu
 from models import User
 from models import EncryptedString
-from models import EncryptionBase
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -49,6 +49,7 @@ def check_if_username_and_password_match(user_name: str, password: str):
 def keep_alive():
     while True:
         try:
+            # Either mono or caesar encryption is possible, so that the rest of keep_alive() can stay generic
             encryption = menu.define_encryption_type_or_exit()
         except ValueError as error:
             logger.info(error)
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     SqlAlchemyBase.metadata.create_all(engine)
     Session = sessionmaker(engine)
     session = Session()
-
+    # the current user is set so that her id can be set in the database for each encryption
     user_curr = set_user()
     menu = Menu()
     keep_alive()
