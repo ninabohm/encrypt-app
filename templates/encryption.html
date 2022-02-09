@@ -27,7 +27,14 @@
         <div class="form-group col-lg-4 mx-auto mt-4">
             {{ form.user_input.label(hidden=true) }}
             <div>
-                {{ form.user_input(class_="form-control mt-3", autofocus="true", placeholder="Enter text") }}
+                {{ form.user_input(
+                    class_="form-control mt-3",
+                    autofocus="true",
+                    placeholder="Enter text",
+                    pattern="^[A-Za-z0-9!#$%&\'()*+,-.|\/:;<=>?@[\]^_`{|}~\"]+$",
+                    title="Please use only english letters, arabic numbers or any of !#$%&\'()*+,-.|\/:;<=>?@[\]^_`{|}~"
+                )
+                }}
             </div>
         </div>
         <div class="form-group col-lg-4 mx-auto mt-4">
