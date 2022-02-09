@@ -11,7 +11,6 @@ from sqlalchemy.exc import IntegrityError
 
 
 logging.basicConfig(stream=sys.stdout,
-                    encoding="utf-8",
                     level=logging.DEBUG,
                     format="%(asctime)s %(message)s",
                     datefmt="%Y-%m-%d %H:%M:%S")
