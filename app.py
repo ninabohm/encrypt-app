@@ -69,10 +69,6 @@ def keep_alive():
             logger.info(f"error: {error}")
 
 
-def check_if_encryption_type_exists(type: str):
-    return session.query(EncryptionBase).filter_by(type=type)
-
-
 if __name__ == "__main__":
     SqlAlchemyBase = declarative_base()
     engine = create_engine("sqlite:///data.db")
