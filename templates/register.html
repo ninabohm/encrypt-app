@@ -5,17 +5,30 @@
 {% endblock %}
 
 {% block content %}
-        <h1>Register</h1>
-        <p>{{error}}</p>
-        <form class="register-form" action="/register" method="POST">
-            <div class="form-group col-lg-4 mx-auto mt-2">
-                {{ form.user_name.label }} {{ form.user_name(class_="form-control", autofocus="true", placeholder="Username")}}
-            </div>
-            <div class="form-group col-lg-4 mx-auto mt-2">
-                {{ form.password.label }} {{ form.password(class_="form-control", placeholder="Password min 6 characters")}}
-            </div>
-            <div>
-                <button class="btn btn-primary mt-4" type="submit">Register</button>
-            </div>
-        </form>
+<h1>Register</h1>
+<p>{{error}}</p>
+<form class="register-form" id="register-form" action="/register" method="POST">
+    <div class="form-group col-lg-4 mx-auto mt-2">
+        {{ form.user_name.label }} {{ form.user_name(class_="form-control", autofocus="true",  id="username", placeholder="Username")}}
+    </div>
+    <div class="form-group col-lg-4 mx-auto mt-2">
+        {{ form.password.label }} {{ form.password(class_="form-control", id="password", placeholder="Password min 6 characters")}}
+    </div>
+    <div>
+        <button class="btn btn-primary mt-4" type="submit">Register</button>
+    </div>
+</form>
+<script>
+    // let frm = $("#register-form");
+    //
+    // items = [];
+    // $.getJSON("animals.json", function (data) {
+    //     $.each(data, function (key, value) {
+    //         if($.inArray(value.item, items) === -1)
+    //         {
+    //             console.log(value.item);
+    //         }
+    //     })
+    // })
+</script>
 {% endblock %}

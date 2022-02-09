@@ -4,7 +4,7 @@ import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webapp import app
-from webapp import check_if_user_exists
+from webapp import set_user
 from webapp import check_if_username_and_password_match
 # from webapp import requires_login
 from webapp import set_user
@@ -49,7 +49,7 @@ class TestWebapp(unittest.TestCase):
         # requirement: no user with use_name = "xyz" in data.db
         with app.app_context():
             with self.assertRaises(NoResultFound):
-                check_if_user_exists("xyz")
+                set_user("xyz")
 
     def test_given_user_does_exists_return_type_user_obj(self):
         # requirement: user with use_name = "yesyesyes" in data.db

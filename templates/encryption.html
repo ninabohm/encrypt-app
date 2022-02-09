@@ -8,14 +8,15 @@
     <h1>Encryption</h1>
     <div>
         <h4>Hello {{user_name}}!</h4>
+        <p>What would you like to encrypt today?</p>
     </div>
     <p>{{error}}</p>
-    <form class="encryption-form" action="/result" method="POST">
+    <form id="encryption-form" class="encryption-form" action="/result" method="POST">
         <div>
             <input id="caesar" type="radio" name="encryption_base" value="caesar" checked>
             <label class="label-1" for="caesar">Caesar Encryption</label>
         </div>
-        <div>
+        <div id="shift" name="shift">
             {{ form.shift.label }}
             {{ form.shift }}
         </div>
@@ -28,10 +29,40 @@
             <div>
                 {{ form.user_input(class_="form-control mt-3", autofocus="true", placeholder="Enter text") }}
             </div>
-
+        </div>
+        <div class="form-group col-lg-4 mx-auto mt-4">
+            <input class="form-control mt-3" id="encrypted_result" type="text" readonly placeholder="Encrypted result">
         </div>
         <div>
-            <button class="btn btn-primary mt-4" type="submit">Encrypt</button>
+            <button class="btn btn-primary mt-4" id="submit-button" type="submit">Encrypt</button>
         </div>
     </form>
+<script>
+    $(document).ready(function () {
+        const frm = $("#encryption-form")
+        $.ajaxSetup({cache: false});
+        frm.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr("method"),
+                url: frm.attr("action"),
+                data: frm.serialize(),
+                success: function(data) {
+                    console.log("submission successful");
+                    $("#encrypted_result").val(data);
+                },
+                error: function(data) {
+                    console.log("An error occurred");
+                    console.log(data);
+                },
+            });
+        });
+        $("input[id='mono']").click(function () {
+            $("#shift").hide()
+        })
+        $("input[id='caesar']").click(function () {
+            $("#shift").show()
+        })
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Account</h1>
+    <p>Welcome, {{user_name}}</p>
+    <button onclick="window.location.href='/logout';" type="button" class="btn btn-info" href="/logout" style="color: #ffffff;">Logout</button>
+{% endblock %}

@@ -78,6 +78,12 @@ def register():
     return render_template("register.html", form=form)
 
 
+@app.route("/account", methods=['GET'])
+@requires_logged_in
+def account():
+    return render_template("account.html", user_name=session["user_name"])
+
+
 @app.route("/login", methods=['GET', 'POST'])
 @requires_not_logged_in
 def login():
@@ -86,7 +92,7 @@ def login():
         user_name = request.form["user_name"]
         password = request.form["password"]
         try:
-            check_if_user_exists(user_name)
+            set_user(user_name)
             check_if_username_and_password_match(user_name, password)
         except NoResultFound:
             error_message = "Account name or password incorrect, please try again or register first"
@@ -98,13 +104,6 @@ def login():
 
 
 def set_user(user_name: str):
-    try:
-        return check_if_user_exists(user_name)
-    except NoResultFound:
-        logger(f"User with name {user_name} does not exist")
-
-
-def check_if_user_exists(user_name: str):
     return db.session.query(User).filter_by(name=user_name).one()
 
 
@@ -136,6 +135,7 @@ def encryption():
 def result():
     encryption_base = request.form.get("encryption_base")
     user_input = request.form.get("user_input")
+
     try:
         shift = int(request.form.get("shift"))
     except ValueError:
@@ -159,14 +159,11 @@ def result():
         logger(f"Added encrypted string {encrypted_string.content} with {encryption.type} encryption for user {user.name}")
     except KeyError as error:
         logger(f"error: {error}")
+    except NoResultFound as error:
+        logger(f"error: {error}")
 
-    return render_template(
-        "result.html",
-        encryption_base=encryption_base,
-        shift=shift,
-        user_input=user_input,
-        encrypted_string=encrypted_string.content
-    )
+    return encrypted_string.content
+
 
 
 @app.route("/users")

@@ -20,7 +20,10 @@ logger = logging.getLogger(__name__)
 
 
 def set_user():
-    user_name = input("First name: ")
+    while True:
+        user_name = input("First name: ")
+        if user_name:
+            break
     password = input("Password: ")
     try:
         user = check_if_username_and_password_match(user_name, password)
