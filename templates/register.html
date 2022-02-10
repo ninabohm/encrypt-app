@@ -8,7 +8,7 @@
 <h1>Register</h1>
 <p>{{error}}</p>
 <form class="register-form" id="register-form" action="/register" method="POST">
-    <div class="form-group col-lg-4 mx-auto mt-2">
+    <div class="form-group col-lg-4 mx-auto mt-2" id="user_name">
         {{ form.user_name.label }} {{ form.user_name(class_="form-control", autofocus="true",  id="username", placeholder="Username")}}
     </div>
     <div class="form-group col-lg-4 mx-auto mt-2">
@@ -19,16 +19,14 @@
     </div>
 </form>
 <script>
-    // let frm = $("#register-form");
-    //
-    // items = [];
-    // $.getJSON("animals.json", function (data) {
-    //     $.each(data, function (key, value) {
-    //         if($.inArray(value.item, items) === -1)
-    //         {
-    //             console.log(value.item);
-    //         }
+    // $(document).ready(function () {
+    //     let endpoint = "https://random-word-api.herokuapp.com/all";
+    //     let data = $.getJSON(endpoint);
+    //     $("#user_name").autocomplete({
+    //         source: data
     //     })
+    //     console.log(data);
     // })
+
 </script>
 {% endblock %}
