@@ -48,8 +48,8 @@
     $(document).ready(function () {
         const frm = $("#encryption-form")
         $.ajaxSetup({cache: false});
-        frm.submit(function (e) {
-            e.preventDefault();
+        frm.submit(function (event) {
+            event.preventDefault();
             $.ajax({
                 type: frm.attr("method"),
                 url: frm.attr("action"),
