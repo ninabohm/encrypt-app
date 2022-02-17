@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Login</h1>
+    <p>{{error}}</p>
+    <form class="login-form" action="/login" method="POST">
+        <div class="form-group col-lg-4 mx-auto mt-2">
+            {{ form.user_name.label }} {{ form.user_name(class_="form-control mt-2", autofocus="true", placeholder="Username")}}
+        </div>
+        <div class="form-group col-lg-4 mx-auto mt-2">
+            {{ form.password.label }} {{ form.password(class_="form-control mt-2", placeholder="Password") }}
+        </div>
+        <div>
+            <button class="btn btn-primary mt-4" type="submit">Login</button>
+        </div>
+    </form>
+    <div>
+        <p>New here? Register <a href="/register">here</a></p>
+    </div>
+{% endblock %}

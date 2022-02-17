@@ -1,55 +1,93 @@
-from flask import Flask, redirect, url_for, render_template
-import logging, sys
-from encryption.caesar_encryption import CaesarEncryption
-from encryption.monoalphabetic_substitution import MonoalphabeticSubstitution
+import logging
+import sys
 from menu.menu import Menu
+from models import User
+from models import EncryptedString
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.exc import IntegrityError
 
-app = Flask(__name__)
 
 logging.basicConfig(stream=sys.stdout,
-    encoding="utf-8",
-    level=logging.DEBUG,
-    format="%(asctime)s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S")
+                    level=logging.DEBUG,
+                    format="%(asctime)s %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S")
+
+logger = logging.getLogger(__name__)
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+def set_user():
+    while True:
+        user_name = input("First name: ")
+        if user_name:
+            break
+    password = input("Password: ")
+    try:
+        user = check_if_username_and_password_match(user_name, password)
+    except NoResultFound:
+        try:
+            user = User(user_name, password)
+            session.add(user)
+            session.commit()
+            logger.info(f"User with name {user_name} did not exist yet, created user on the fly")
+        except IntegrityError:
+            session.rollback()
+            logger.info(f"User {user_name} already exists. Please try again.")
+            set_user()
+    except MultipleResultsFound:
+        user = session.query(User).filter_by(name=user_name).first()
+        logger.info(f"User with name {user_name} exists already more than once. Logging into first account")
+    return user
 
+
+def check_if_username_and_password_match(user_name: str, password: str):
+    return session.query(User).filter_by(name=user_name, password=password).one()
+
+
+def keep_alive():
+    while True:
+        try:
+            # Either mono or caesar encryption is possible, so that the rest of keep_alive() can stay generic
+            encryption = menu.define_encryption_type_or_exit()
+        except ValueError as error:
+            logger.info(error)
+            print("We don't have a menu option for this number, please try again")
+            exit()
+        user_input = encryption.get_user_input_from_cli()
+        user_shift = encryption.get_shift_from_cli()
+        encryption_content = encryption.encrypt_input(user_input, user_shift)
+        session.add(encryption)
+
+        try:
+            encrypted_string = EncryptedString(encryption_content, encryption, user_curr)
+            encryption.encrypted_strings.append(encrypted_string)
+            session.add(encrypted_string)
+            session.commit()
+            print(encrypted_string.content)
+        except KeyError as error:
+            logger.info(f"error: {error}")
 
 
 if __name__ == "__main__":
-    #app.run()
-    promptMenu = Menu()
-    promptMenu.print_menu()
-
-    while True:
-        value = input("Choose a value and press Enter: ")
-
-        if value == "1":
-            logging.info("Caesar Encryption started")
-            while True:
-                newEncryption = CaesarEncryption()
-                print("Please insert a string")
-                newEncryption.get_userInput_from_cli()
-                shift = input("Please insert the offset/vector (Press Enter for a random value): ")
-                newEncryption.encrypt_input(newEncryption.userInput, shift)
-                print(newEncryption.encryptedContent)
-
-        if value == "2":
-            logging.info("Monoalphabetic Substitution Encryption started")
-            while True:
-                newEncryption = MonoalphabeticSubstitution()
-                newEncryption.get_userInput_from_cli()
-                newEncryption.encrypt_input(newEncryption.userInput)
-                print(newEncryption.encryptedContent)
-
-        if value == "3":
-            print("Welcome to the encrypt-app")
-
-        if value == "4":
-            exit()
+    SqlAlchemyBase = declarative_base()
+    engine = create_engine("sqlite:///data.db")
+    SqlAlchemyBase.metadata.create_all(engine)
+    Session = sessionmaker(engine)
+    session = Session()
+    # the current user is set so that her id can be set in the database for each encryption
+    user_curr = set_user()
+    menu = Menu()
+    keep_alive()
+    session.commit()
 
 
-    
+
+
+
+
+
+
+
+

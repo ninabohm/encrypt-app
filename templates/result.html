@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %} Result {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Encryption Result</h1>
+    <form class="encryption-form">
+        <div class="form-group col-lg-4 mx-auto">
+            <label for="encrypted_string">Your encrypted word:</label>
+            <input id="encrypted_string" name="encrypted_string" type="text" class="form-control mt-2" readonly value="{{encrypted_string}}"><br>
+        </div>
+    </form>
+    <a class="btn btn-primary" href="/encryption">New word</a>
+{% endblock %}

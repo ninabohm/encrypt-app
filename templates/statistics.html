@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} Statistics {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+   <h1>Data Analysis</h1>
+<div class="container" style="padding-left: 10%; padding-right: 10%">
+    <div id="chart1" class="chart1" style="text-align: center"></div>
+</div>
+<div class="container" style="padding-left: 10%; padding-right: 10%">
+    <div id="chart2" class="chart2" style="text-align: center"></div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    const graphs_user = {{graph_json_user | safe }};
+    const graphs_chars = {{graph_json_chars | safe }};
+    Plotly.plot("chart1", graphs_user, {});
+    Plotly.plot("chart2", graphs_chars, {});
+
+</script>
+{% endblock %}
