@@ -292,10 +292,5 @@ $RECYCLE.BIN/
 
 /exercise/data.db
 /venv
-
-
 __pychache__
-
 *.DS_Store
-
-data.db
