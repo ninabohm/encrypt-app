@@ -297,3 +297,5 @@ $RECYCLE.BIN/
 __pychache__
 
 *.DS_Store
+
+data.db
