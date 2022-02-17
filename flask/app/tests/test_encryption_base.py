@@ -1,5 +1,5 @@
 import unittest
-from models import EncryptionBase
+from flask.app.model.models import EncryptionBase
 from unittest.mock import patch
 
 

@@ -3,13 +3,11 @@ import logging
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from webapp import app
-from webapp import set_user
-from webapp import check_if_username_and_password_match
-# from webapp import requires_login
-from webapp import set_user
+from flask.app import app
+from flask.app import check_if_username_and_password_match
+from flask.app import set_user
 from sqlalchemy.orm.exc import NoResultFound
-from models import User
+from flask.app.model.models import User
 
 logger = logging.getLogger(__name__)
 

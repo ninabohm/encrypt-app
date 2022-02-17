@@ -8,10 +8,10 @@ from flask_bootstrap import Bootstrap
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-from models import User
-from models import MonoalphabeticSubstitution
-from models import CaesarEncryption
-from models import EncryptedString
+from app.model.models import User
+from app.model.models import MonoalphabeticSubstitution
+from app.model.models import CaesarEncryption
+from app.model.models import EncryptedString
 from flask_sqlalchemy import SQLAlchemy
 from flask import session
 import plotly
@@ -215,5 +215,4 @@ def get_chars_count():
     return graph_json_chars
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+

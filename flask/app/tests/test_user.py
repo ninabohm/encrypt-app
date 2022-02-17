@@ -1,5 +1,5 @@
 import unittest
-from models import User
+from flask.app.model.models import User
 
 
 class TestUser(unittest.TestCase):

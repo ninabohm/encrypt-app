@@ -1,5 +1,5 @@
 import unittest
-from models import MonoalphabeticSubstitution
+from flask.app.model.models import MonoalphabeticSubstitution
 
 
 class TestMonoalphabeticSubstitution(unittest.TestCase):

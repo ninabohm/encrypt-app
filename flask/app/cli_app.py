@@ -1,8 +1,8 @@
 import logging
 import sys
-from menu.menu import Menu
-from models import User
-from models import EncryptedString
+from flask.app.menu import Menu
+from flask.app.model.models import User
+from flask.app.model.models import EncryptedString
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

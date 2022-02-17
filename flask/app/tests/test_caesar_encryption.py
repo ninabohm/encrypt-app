@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from models import CaesarEncryption
+from flask.app.model.models import CaesarEncryption
 
 
 class TestCaesarEncryption(unittest.TestCase):
