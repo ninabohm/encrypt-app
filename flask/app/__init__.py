@@ -4,10 +4,10 @@ import logging
 from functools import wraps
 
 from flask import Flask, request, render_template, redirect
-from flask_bootstrap import Bootstrap
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
+from flask_bootstrap import Bootstrap
 from app.model.models import User
 from app.model.models import MonoalphabeticSubstitution
 from app.model.models import CaesarEncryption
@@ -17,7 +17,7 @@ from flask import session
 import plotly
 import plotly.express as px
 import pandas as pd
-from forms import RegisterForm, LoginForm, EncryptionForm
+from app.forms.forms import RegisterForm, LoginForm, EncryptionForm
 
 db = SQLAlchemy()
 
